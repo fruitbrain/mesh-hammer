@@ -69,10 +69,10 @@ Then, extract the tarball by typing:
 (I have no idea either)
 
 ### 4. Build Chicken Scheme (the tricky part)
-We are going to use the formerly installed mingw-w64 toolchains
+We are going to use the installed mingw-w64 toolchains
 to build Chicken.
 
-To do so, first `cd` into the extracted directory, and then do the following:
+To do so, first `cd` into the extracted directory, and then
 
 1. Execute the following
 
@@ -82,15 +82,25 @@ To do so, first `cd` into the extracted directory, and then do the following:
   ```
   
   (again, note the *forward slash*)
+
+  The C:/chicken part can be any folder you want, just be consistent.
   
-2. If anything fails with error messages, type the following
+2. If anything fails with error messages, execute the following
 
   ```
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken clean
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken confclean
   ```
   
-  And then repeat step 1 and 2.
+  And repeat step 1.
+
+### 5. Add Chicken binaries to the PATH variable
+
+Add `C:\chicken\bin` to the end of the Account PATH variable.
+(This time use the *backward slash*.)
+
+You can open the dialog by searching "계정의 환경 변수 편집" in the
+Windows menu.
 
 ## How to build
 ```
