@@ -1,6 +1,90 @@
 # Plum
 Plum, a Lisp-powered Ultimate Modeler
 
+## Build environment setup
+1. Install MSYS2
+from https://msys2.github.io/.
+
+Follow all the instructions in there.
+
+2. Install MinGW packages in MSYS2
+Execute MinGW-w64 Win64 Shell.
+
+We can find it by typing "mingw-w64" in the "Windows menu" (or whatever).
+
+Brief how-to for the pacman package manager:
+
+* Installing
+```
+pacman -S <package-name1> <package-name2> ...
+
+```
+
+* Removing
+```
+pacman -R <package-name1> <package-name2> ...
+
+```
+
+* Upgrading the whole system
+```
+pacman -Su
+
+```
+
+* Searching
+```
+pacman -Ss <query-string>
+
+```
+
+* Viewing package info
+```
+pacman -Si <package-name>
+
+```
+
+* Searching from installed packages
+```
+pacman -Qs <package-name>
+
+```
+
+Install following packages:
+* mingw-w64-x86_64-gcc
+* mingw-w64-x86_64-make
+* git
+* tar (For extracting, may use AlZip crap as well)
+
+Now MinGW installation is over.
+
+3. Download and extract source tarball of Chicken Scheme
+from http://code.call-cc.org/.
+
+Recommended version: chicken-4.9.0.1.tar.gz
+
+In the MSYS2 shell, go to the directory the tarball is in
+
+by typing:
+
+```
+cd C:/Users/<accountname>/<folder>
+```
+(note the usage of forward slash)
+
+Then, extract the tarball
+
+by using:
+```
+tar zxvf chicken-<verion>.tar.gz
+```
+(I have no idea either)
+
+4. Build Chicken Scheme using MinGW-w64
+
+
 ## How to build
+```
 gcc -c fib.c
 csc -o fib-user fib.o fib-user
+```
