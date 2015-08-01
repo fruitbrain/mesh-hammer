@@ -51,9 +51,8 @@ Using above commands, install following packages:
 - tar (For extracting, may use AlZip crap as well)
 
 ### 3. Download and extract Chicken Scheme source tarball 
-from http://code.call-cc.org/.
-  
-Recommended version: chicken-4.9.0.1.tar.gz
+from http://code.call-cc.org/.  
+Recommended version is chicken-4.9.0.1.tar.gz
   
 In the MSYS2 shell, go to the directory the tarball is in
 by typing:
@@ -73,8 +72,16 @@ Then, extract the tarball by typing:
 We are going to use the formerly installed mingw-w64 toolchains
 to build Chicken.
 
-To do so, 
-
+To do so, first `cd` into the extracted directory, and then do the following:
+1. `mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken
+2. `mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install`
+  (again, note the *forward slash*)
+3. If anything fails with error messages, type the following
+  ```
+  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken clean
+  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken confclean
+  ```
+  And then repeat step 1 and 2.
 
 ## How to build
 ```
