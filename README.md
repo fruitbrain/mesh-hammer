@@ -2,12 +2,12 @@
 Plum, a Lisp-powered Ultimate Modeler
 
 ## Build environment setup
-1. Install MSYS2
+### 1. Install MSYS2
   from https://msys2.github.io/.
 
   Follow all the instructions in there.
 
-2. Install MinGW packages in MSYS2
+### 2. Install MinGW packages in MSYS2
   Execute MinGW-w64 Win64 Shell.
 
   We can find it by typing "mingw-w64" in the windows button
@@ -53,7 +53,7 @@ Plum, a Lisp-powered Ultimate Modeler
 
   Now MinGW installation is over.
 
-3. Download and extract source tarball of Chicken Scheme
+### 3. Download and extract source tarball of Chicken Scheme
   from http://code.call-cc.org/.
   
   Recommended version: chicken-4.9.0.1.tar.gz
@@ -65,7 +65,7 @@ Plum, a Lisp-powered Ultimate Modeler
   ```
   cd C:/Users/<accountname>/<folder>
   ```
-  (note the usage of forward slash)
+  (note usage of *forward slash*)
   
   Then, extract the tarball
 
@@ -75,7 +75,7 @@ Plum, a Lisp-powered Ultimate Modeler
   ```
   (I have no idea either)
 
-4. Build Chicken Scheme using MinGW-w64
+### 4. Build Chicken Scheme using MinGW-w64
 
 
 ## How to build
