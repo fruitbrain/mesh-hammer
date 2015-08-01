@@ -8,8 +8,7 @@ Plum, a Lisp-powered Ultimate Modeler
   Follow all the instructions in there.
 
 ### 2. Install MinGW packages in MSYS2
-Execute MinGW-w64 Win64 Shell.
-
+Execute MinGW-w64 Win64 Shell.  
 We can find it by typing "mingw-w64" in the windows button
 or however they call it.
 
@@ -70,7 +69,11 @@ Then, extract the tarball by typing:
   ```
 (I have no idea either)
 
-### 4. Build Chicken Scheme using MinGW-w64
+### 4. Build Chicken Scheme (the tricky part)
+We are going to use the formerly installed mingw-w64 toolchains
+to build Chicken.
+
+To do so, 
 
 
 ## How to build
