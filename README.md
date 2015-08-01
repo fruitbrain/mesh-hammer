@@ -73,10 +73,14 @@ We are going to use the formerly installed mingw-w64 toolchains
 to build Chicken.
 
 To do so, first `cd` into the extracted directory, and then do the following:
-1. `mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken
-2. `mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install`
+
+1. Execute the following
+  ```
+  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken
+  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install`
+  ```
   (again, note the *forward slash*)
-3. If anything fails with error messages, type the following
+2. If anything fails with error messages, type the following
   ```
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken clean
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken confclean
