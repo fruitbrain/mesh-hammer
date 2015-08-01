@@ -8,12 +8,12 @@ Plum, a Lisp-powered Ultimate Modeler
   Follow all the instructions in there.
 
 ### 2. Install MinGW packages in MSYS2
-  Execute MinGW-w64 Win64 Shell.
+Execute MinGW-w64 Win64 Shell.
 
-  We can find it by typing "mingw-w64" in the windows button
-  or however they call it.
+We can find it by typing "mingw-w64" in the windows button
+or however they call it.
 
-  Brief how-to for the pacman package manager:
+Brief how-to for the pacman package manager:
 
 * Installing
   ```
@@ -45,35 +45,30 @@ Plum, a Lisp-powered Ultimate Modeler
   pacman -Qs <package-name>
   ```
 
-  Using above commands, install following packages:
-  * mingw-w64-x86_64-gcc
-  * mingw-w64-x86_64-make
-  * git
-  * tar (For extracting, may use AlZip crap as well)
+Using above commands, install following packages:
+- mingw-w64-x86_64-gcc
+- mingw-w64-x86_64-make
+- git
+- tar (For extracting, may use AlZip crap as well)
 
-  Now MinGW installation is over.
-
-### 3. Download and extract source tarball of Chicken Scheme
-  from http://code.call-cc.org/.
+### 3. Download and extract Chicken Scheme source tarball 
+from http://code.call-cc.org/.
   
-  Recommended version: chicken-4.9.0.1.tar.gz
+Recommended version: chicken-4.9.0.1.tar.gz
   
-  In the MSYS2 shell, go to the directory the tarball is in
-  
-  by typing:
+In the MSYS2 shell, go to the directory the tarball is in
+by typing:
 
   ```
   cd C:/Users/<accountname>/<folder>
   ```
-  (note usage of *forward slash*)
+(note usage of *forward slash*)
   
-  Then, extract the tarball
-
-  by using:
+Then, extract the tarball by typing:
   ```
   tar zxvf chicken-<verion>.tar.gz
   ```
-  (I have no idea either)
+(I have no idea either)
 
 ### 4. Build Chicken Scheme using MinGW-w64
 
