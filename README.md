@@ -8,9 +8,12 @@ Plum, a Lisp-powered Ultimate Modeler
   Follow all the instructions in there.
 
 ### 2. Install MinGW packages in MSYS2
+MSYS2 comes with functionalities to easily install all MinGW related packages
+and automatically upgrade them.
+
 Execute MinGW-w64 Win64 Shell.  
-We can find it by typing "mingw-w64" in the windows button
-or however they call it.
+We can find it by typing "mingw-w64" in the windoze button
+or whatever  they call it.
 
 Brief how-to for the pacman package manager:
 
@@ -26,7 +29,7 @@ Brief how-to for the pacman package manager:
 
 * Upgrading the whole system
   ```
-  pacman -Su
+  pacman -Syu
   ```
 
 * Searching
@@ -48,11 +51,11 @@ Using above commands, install following packages:
 - mingw-w64-x86_64-gcc
 - mingw-w64-x86_64-make
 - git
-- tar (For extracting, may use AlZip crap as well)
+- tar (For extracting, may use AlZip crapware as well)
 
 ### 3. Download and extract Chicken Scheme source tarball 
 from http://code.call-cc.org/.  
-Recommended version is chicken-4.9.0.1.tar.gz
+Recommended version is *chicken-4.9.0.1.tar.gz*.
   
 In the MSYS2 shell, go to the directory the tarball is in
 by typing:
@@ -60,7 +63,7 @@ by typing:
   ```
   cd C:/Users/<accountname>/<folder>
   ```
-(note usage of *forward slash*)
+(note usage of **forward slash**)
   
 Then, extract the tarball by typing:
   ```
@@ -81,23 +84,23 @@ To do so, first `cd` into the extracted directory, and then
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install`
   ```
   
-  (again, note the *forward slash*)
+  (again, note the **forward slash**)
 
   The C:/chicken part can be any folder you want, just be consistent.
   
-2. If anything fails with error messages, execute the following
+2. If anything wants to fail with error messages, execute the following
 
   ```
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken clean
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken confclean
   ```
-  
-  And repeat step 1.
+
+  Troubleshoot if possible, and repeat step 1.
 
 ### 5. Add Chicken binaries to the PATH variable
 
-Add `C:\chicken\bin` to the end of the Account PATH variable.
-(This time use the *backward slash*.)
+Add `C:\chicken\bin` to the end of the Account PATH variable.  
+(This time **backward slashes** are needed.)
 
 You can open the dialog by searching "계정의 환경 변수 편집" in the
 Windows menu.
