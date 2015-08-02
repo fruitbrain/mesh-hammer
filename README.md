@@ -81,7 +81,7 @@ To do so, first `cd` into the extracted directory, and then
 
   ```
   mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken
-  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install`
+  mingw32-make PLATFORM=mingw-msys ARCH=x86-64 PREFIX=C:/chicken install
   ```
   
   (again, note the **forward slash**)
