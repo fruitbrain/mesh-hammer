@@ -1,9 +1,15 @@
-#include "sdl.hpp"
+#include "display.h"
+#include <iostream>
+
+int DISPLAY_WIDTH = 800;
+int DISPLAY_HEIGHT = 400;
 
 int main(int argc, char** argv) {
-	sdl_init();
-	sdl_window();
-	sdl_renderer();
-	sdl_cleanup();
-	return 0;
+
+	for (int i=0; i<100; i++)
+	{
+		Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "Hello Minecraft");
+	}
+	
+	std::cout << "New world" << std::endl;
 }
