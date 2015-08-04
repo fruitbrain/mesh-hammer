@@ -1,16 +1,31 @@
-SC=csc
-CC=g++
-CXXFLAGS=-Wall -c -std=c++11
-LDFLAGS=-lmingw32 -lSDL2main -lSDL2
-SCFLAGS=-o plum -c++ $(LDFLAGS)
+CFLAGS=-c -g -Wall -std=c++11
+LIB=-lmingw32 -lglew32 -lSDL2main -lSDL2 -lSDL2_test -lOpenGL32
 
-all: plum
+all: main
 
-plum: plum.scm sdl.o
-	$(SC) plum.scm sdl.o $(SCFLAGS)
+main: main.o display.o mesh.o obj_loader.o shader.o stb_image.o texture.o
+	g++ -o main display.o mesh.o obj_loader.o shader.o stb_image.o texture.o main.o $(LIB)
 
-sdl.o: sdl.cpp
-	$(CC) $(CXXFLAGS) sdl.cpp
+main.o: main.cpp
+	g++ $(CFLAGS) main.cpp
+
+display.o: display.cpp
+	g++ $(CFLAGS) display.cpp
+
+mesh.o: mesh.cpp
+	g++ $(CFLAGS) mesh.cpp
+
+obj_loader.o: obj_loader.cpp
+	g++ $(CFLAGS) obj_loader.cpp
+
+shader.o: shader.cpp
+	g++ $(CFLAGS) shader.cpp
+
+stb_image.o: stb_image.c
+	g++ $(CFLAGS) stb_image.c
+
+texture.o: texture.cpp
+	g++ $(CFLAGS) texture.cpp
 
 clean:
-	rm -f *.o plum
+	rm -r *.o main
