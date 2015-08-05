@@ -2,12 +2,22 @@ SC=csc
 CC=g++
 CXXFLAGS=-Wall -c -std=c++11
 LDFLAGS=-lmingw32 -lSDL2main -lSDL2
-SCFLAGS=-o plum -c++ $(LDFLAGS)
+EXE=plum
+SCFLAGS=-o $(EXE) -c++ $(LDFLAGS)
 
 all: plum
 
-plum: plum.scm sdl.o
-	$(SC) plum.scm sdl.o $(SCFLAGS)
+plum: plum.o sdl-ffi.o sdl.o
+	$(SC) plum.o sdl-ffi.o sdl.o $(SCFLAGS)
+
+plum.o:
+	$(SC) -c plum.scm -c++
+
+sdl-ffi.o:
+	$(SC) -c sdl-ffi.scm -c++
+
+sdl-ffi.so: sdl-ffi.scm sdl.o
+	$(SC) -s sdl-ffi.scm sdl.o -c++ $(LDFLAGS) 
 
 sdl.o: sdl.cpp
 	$(CC) $(CXXFLAGS) sdl.cpp

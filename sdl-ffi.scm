@@ -1,3 +1,5 @@
+(declare (unit sdl-ffi))
+
 #>
 #include "sdl.hpp"
 <#
