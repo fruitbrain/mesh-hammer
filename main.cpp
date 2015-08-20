@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	}
 	
 	// create a GLFW window
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Minecraft", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW WINDOW", NULL, NULL);
 	std::cout << "Created a GLFW window!" << std::endl;
 	
 	if(!window) // *activated when window is not open
@@ -39,6 +39,9 @@ int main(int argc, char** argv)
 		0.0f,	0.5f,	0.0f,
 		0.5f,	-0.5f,	0.0f,
 		-0.5f,	-0.5f,	0.0f,
+		0.0f,	-0.5f,	0.0f,
+		-0.5f,	0.5f,	0.0f,
+		0.5f,	0.5f,	0.0f,
 	};
 	
 	// Vertex array Buffer Object
@@ -96,7 +99,7 @@ int main(int argc, char** argv)
 		glBindVertexArray(vao);
 		
 		// draw the points & update
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 5);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
