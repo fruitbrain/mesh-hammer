@@ -18,8 +18,8 @@ public:
 	Shader(const GLchar* vertex_path, const GLchar* fragment_path)
 	{
 		/* Read the source code from filePath */
-		std::string vertex_code_str;
-		std::string fragment_code_str;
+		std::string vertex_source_str;
+		std::string fragment_source_str;
 		std::ifstream vertex_file;
 		std::ifstream fragment_file;
 		// ensures ifstream objects can throw exceptions:
@@ -37,14 +37,14 @@ public:
 			vertex_file.close();
 			fragment_file.close();
 			// Convert stream into GLchar array
-			vertex_code_str = vertex_stream.str();
-			fragment_code_str = fragment_stream.str();
+			vertex_source_str = vertex_stream.str();
+			fragment_source_str = fragment_stream.str();
 		}
 		catch(std::ifstream::failure e) {
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
-		const GLchar* vertex_source = vertex_code_str.c_str();
-		const GLchar* fragment_source = fragment_code_str.c_str();
+		const GLchar* vertex_source = vertex_source_str.c_str();
+		const GLchar* fragment_source = fragment_source_str.c_str();
 
 		/* Compile shaders */
 		GLuint vertex, fragment;
