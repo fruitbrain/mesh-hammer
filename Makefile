@@ -26,8 +26,8 @@ sdl.o: sdl.cpp
 engine: main.o
 	$(CC) -o main main.o $(LDFLAGS)
 
-main.o: main.cpp
-	$(CC) $(CXXFLAGS) main.cpp
+main.o: main.cpp shader.h
+	$(CC) $(CXXFLAGS) main.cpp shader.h
 
 clean:
 	rm -f *.o plum main
