@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 // GLEW
 #define GLEW_STATIC
@@ -11,8 +12,20 @@
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+GLfloat vertices[] = {
+	0.5f,  0.5f, 0.0f,
+	0.5f, -0.5f, 0.0f,
+	-0.5f, -0.5f, 0.0f,
+	-0.5f,  0.5f, 0.0f
+};
+GLuint indices[] = {
+	0, 1, 3,
+	1, 2, 3
+};
+
 int main()
 {
+	/* Initialize */
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -38,29 +51,16 @@ int main()
 
 	glViewport(0, 0, 800, 600);
 
-	GLfloat vertices[] = {
-	       0.5f,  0.5f, 0.0f,		
-	       0.5f, -0.5f, 0.0f,
-	      -0.5f, -0.5f, 0.0f,
-	      -0.5f,  0.5f, 0.0f
-	};
-	GLuint indices[] = {
-		0, 1, 3,
-		1, 2, 3
-	};
-
 	/* Shaders */
 	Shader shader("shader.vert", "shader.frag");
 
-	/* Generate vertex array object */
+	/* Generate OpenGL objects */
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
 
-	/* Generate vertex buffer object */
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
-	/* Generate element buffer object */
 	GLuint EBO;
 	glGenBuffers(1, &EBO);
 	
@@ -94,13 +94,15 @@ int main()
 		// Reset screen
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
-		// Use the program
+
+		// Shaders
+		GLfloat timeValue = glfwGetTime();
+		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
 		shader.use();
+		shader.set_uniform("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
 		// Run the "macro"
 		glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
 	        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 

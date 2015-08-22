@@ -11,10 +11,14 @@
 class Shader
 {
 public:
-	// The Program ID
+	/**
+	   Program ID
+	*/
 	GLuint program;
 
-	// Constructor reads and builds the shader
+	/**
+	   Reads and builds the shader.
+	*/
 	Shader(const GLchar* vertex_path, const GLchar* fragment_path)
 	{
 		/* Read the source code from filePath */
@@ -90,10 +94,29 @@ public:
 		glDeleteShader(fragment);
 	}
 
-	// Use the program
+	/**
+	   Use the program.
+	*/
 	void use()
 	{
 		glUseProgram(program);
+	}
+
+	/**
+	   Set uniforms in the program.
+	   Parameter overloaded.
+	   Must be called AFTER use()ing the program.
+	*/
+	void set_uniform(const GLchar* name, float x, float y)
+	{
+		GLint location = glGetUniformLocation(program, name);
+		glUniform2f(location, x, y);
+	}
+
+	void set_uniform(const GLchar* name, float x, float y, float z, float w)
+	{
+		GLint location = glGetUniformLocation(program, name);
+		glUniform4f(location, x, y, z, w);
 	}
 };
 
