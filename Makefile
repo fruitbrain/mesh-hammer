@@ -10,10 +10,10 @@ all: plum
 plum: plum.o sdl-ffi.o sdl.o
 	$(SC) plum.o sdl-ffi.o sdl.o $(SCFLAGS)
 
-plum.o:
+plum.o: plum.scm
 	$(SC) -c plum.scm -c++
 
-sdl-ffi.o:
+sdl-ffi.o: sdl-ffi.scm
 	$(SC) -c sdl-ffi.scm -c++
 
 sdl-ffi.so: sdl-ffi.scm sdl.o
@@ -25,9 +25,9 @@ sdl.o: sdl.cpp
 ## Building Graphics Engine
 engine: main.o
 	$(CC) -o main main.o $(LDFLAGS)
-	
-main.o:
+
+main.o: main.cpp
 	$(CC) $(CXXFLAGS) main.cpp
-	
+
 clean:
 	rm -f *.o plum main
