@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader
 {
@@ -117,6 +118,15 @@ public:
 	{
 		GLint location = glGetUniformLocation(program, name);
 		glUniform4f(location, x, y, z, w);
+	}
+
+	void set_uniform(const GLchar* name, glm::mat4 m)
+	{
+		GLuint location = glGetUniformLocation(program, name);
+		// 2nd: How many matrices
+		// 3rd: Transpose
+		// 4th: value_ptr of m
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
 	}
 };
 

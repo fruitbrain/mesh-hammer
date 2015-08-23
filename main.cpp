@@ -120,14 +120,10 @@ int main()
 		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
 		shader.use();
 		shader.set_uniform("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
-		GLuint model_loc = glGetUniformLocation(shader.program, "model");
-		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
-		GLuint view_loc = glGetUniformLocation(shader.program, "view");
-		glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
-		GLuint projection_loc = glGetUniformLocation(shader.program, "projection");
-		glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection));
-		GLuint transform_loc = glGetUniformLocation(shader.program, "transform");
-		glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(trans));
+		shader.set_uniform("model", model);
+		shader.set_uniform("view", view);
+		shader.set_uniform("projection", projection);
+		shader.set_uniform("transform", trans);
 
 		// Run the "macro"
 		glBindVertexArray(VAO);
