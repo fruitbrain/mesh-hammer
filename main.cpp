@@ -160,13 +160,13 @@ int main()
 		glm::mat4 view;
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(75.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 
 		// Shaders
-		GLfloat timeValue = glfwGetTime();
-		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
+		GLfloat time = glfwGetTime();
+		GLfloat color_value = (sin(time) / 2) + 0.5;
 		shader.use();
-		shader.set_uniform("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
+		shader.set_uniform("ourColor", color_value, 0.0f, color_value, 1.0f);
 		shader.set_uniform("model", model);
 		shader.set_uniform("view", view);
 		shader.set_uniform("projection", projection);
