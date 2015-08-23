@@ -19,12 +19,59 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
+// Square
+// GLfloat vertices[] = {
+// 	0.5f,  0.5f, 0.0f,
+// 	0.5f, -0.5f, 0.0f,
+// 	-0.5f, -0.5f, 0.0f,
+// 	-0.5f,  0.5f, 0.0f
+// };
+
+// Cube
 GLfloat vertices[] = {
-	0.5f,  0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f,
-	-0.5f, -0.5f, 0.0f,
-	-0.5f,  0.5f, 0.0f
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f
 };
+
 GLuint indices[] = {
 	0, 1, 3,
 	1, 2, 3
@@ -106,14 +153,11 @@ int main()
 
 		// Transform
 		glm::mat4 model;
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, (GLfloat)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		glm::mat4 view;
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
-		glm::mat4 trans;
-		//trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-		trans = glm::rotate(trans, (GLfloat)glfwGetTime() * 1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Shaders
 		GLfloat timeValue = glfwGetTime();
@@ -123,11 +167,11 @@ int main()
 		shader.set_uniform("model", model);
 		shader.set_uniform("view", view);
 		shader.set_uniform("projection", projection);
-		shader.set_uniform("transform", trans);
 
 		// Run the "macro"
 		glBindVertexArray(VAO);
-	        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
 		/* Swap the buffers */
