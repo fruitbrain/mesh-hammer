@@ -1,7 +1,8 @@
 SC=csc
 CC=g++
 CXXFLAGS=-Wall -c -std=c++11
-LDFLAGS=-mwindows -lSDL2main -lSDL2 C:/msys64/mingw64/lib/libglfw3.a C:/msys64/mingw64/lib/libglew32.a -lopengl32
+#LDFLAGS=-mwindows -lSDL2main -lSDL2 C:/msys64/mingw64/lib/libglfw3.a C:/msys64/mingw64/lib/libglew32.a -lopengl32
+LDFLAGS=`pkg-config --static --libs sdl2 glfw3 glew`
 EXE=plum
 SCFLAGS=-o $(EXE) -c++ $(LDFLAGS)
 
@@ -30,4 +31,4 @@ main.o: main.cpp shader.h
 	$(CC) $(CXXFLAGS) main.cpp shader.h
 
 clean:
-	rm -f *.o plum main
+	rm -f *.o *.gch plum main
