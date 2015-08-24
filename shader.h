@@ -114,6 +114,12 @@ public:
 		glUniform2f(location, x, y);
 	}
 
+	void set_uniform(const GLchar* name, float x, float y, float z)
+	{
+		GLint location = glGetUniformLocation(program, name);
+		glUniform3f(location, x, y, z);
+	}
+
 	void set_uniform(const GLchar* name, float x, float y, float z, float w)
 	{
 		GLint location = glGetUniformLocation(program, name);

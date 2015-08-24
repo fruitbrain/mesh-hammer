@@ -2,10 +2,10 @@
 
 out vec4 color;
 
-uniform vec4 ourColor;
+uniform vec3 color_object;
+uniform vec3 color_light;
 
 void main()
 {
-	// color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-	color = ourColor;
+	color = vec4(color_light * color_object, 1.0f);
 }

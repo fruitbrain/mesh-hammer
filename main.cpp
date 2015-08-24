@@ -109,22 +109,25 @@ int main()
 	/* OpenGL options */
 	glEnable(GL_DEPTH_TEST);
 
+	/* Misc variables */
+	glm::vec3 light_pos(1.2f, 1.0f, 2.0f);
+
 	/* Shaders */
 	Shader shader("shader.vert", "shader.frag");
+	Shader shader_lamp("shader.vert", "lamp.frag");
 
-	/* Generate OpenGL objects */
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-
+	/* Generate Opengl objects */
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
 	GLuint EBO;
 	glGenBuffers(1, &EBO);
-	
-	/* Save the "macro" */
+
+	/* VAO for the container */
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-	
+
 	// Bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -134,17 +137,24 @@ int main()
 	// Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
 	// Link vertex attributes (Important!)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
 	glBindVertexArray(0);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
+	/* VAO for the light */
+	GLuint vao_light;
+	glGenVertexArrays(1, &vao_light);
+	glBindVertexArray(vao_light);
+
+	// No need to feed data this time
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// Only position data
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
 	/* Render loop */
 	while (!glfwWindowShouldClose(window)) {
 		/* Check and call events */
@@ -155,26 +165,34 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Transform
+		// Container
 		glm::mat4 model;
 		model = glm::rotate(model, (GLfloat)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		glm::mat4 view;
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(75.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
-
-		// Shaders
-		GLfloat time = glfwGetTime();
-		GLfloat color_value = (sin(time) / 2) + 0.5;
 		shader.use();
-		shader.set_uniform("ourColor", color_value, 0.0f, color_value, 1.0f);
+		shader.set_uniform("color_object", 1.0f, 0.5f, 0.31f);
+		shader.set_uniform("color_light", 1.0f, 1.0f, 1.0f);
 		shader.set_uniform("model", model);
 		shader.set_uniform("view", view);
 		shader.set_uniform("projection", projection);
 
-		// Run the "macro"
 		glBindVertexArray(VAO);
-	        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		// Lamp
+		model = glm::mat4(); // Reuse model
+		model = glm::translate(model, light_pos);
+		model = glm::scale(model, glm::vec3(0.2f));
+		shader_lamp.use();
+		shader_lamp.set_uniform("model", model);
+		shader_lamp.set_uniform("view", view);
+		shader_lamp.set_uniform("projection", projection);
+		glBindVertexArray(vao_light);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
