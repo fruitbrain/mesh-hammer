@@ -10,41 +10,41 @@ double strToFloat(std::vector<char> charvec);
 int main()
 {
 	DrawMesh();
-	
+
 	return 0;
 }
 
 std::vector<double> DrawMesh()
 {
 	std::cout << "Hello OpenGL" << std::endl;
-	
+
 	// opening an input stream for the file
-	
+
 	std::ifstream ifs("example.plum", std::ios::in|std::ios::binary);
-	
+
 	if(!ifs.is_open())
 	{
 		std::cerr << "ERROR : The file did not open." << std::endl;
 	}
-	
+
 	std::cout << "The file opened successfully. Reading data from file to a vector..." << std::endl;
-	
+
 	// creating a vector container for all of the vertex data
-	
+
 	std::vector<std::vector<char> > vc;
-	
+
 	// start a loop to find all the vertex data & store it in a vector
-	
+
 	char memblock[] = {' '};
 	std::vector<char> tempvec;
-	
+
 	while(true)
 	{
 		ifs.read(memblock, 1);
 		if(memblock[0] == 'v')
-		{	
+		{
 			ifs.seekg(1, std::ios::cur);
-			
+
 			while(true)
 			{
 				ifs.read(memblock, 1);
@@ -67,7 +67,7 @@ std::vector<double> DrawMesh()
 				}
 			}
 		}
-		
+
 		else
 		{
 			while(memblock[0] != 0x0d)
@@ -77,19 +77,19 @@ std::vector<double> DrawMesh()
 			ifs.seekg(1, std::ios::cur);
 		}
 	}
-	
+
 	ifs.close();
 	std::cout << "Reading data finished!" << std::endl;
-	
+
 	// change std::vector<std::vector<char> > into a std::vector<double> - char to double transformation
-	
+
 	std::vector<double> vertexList;
-	
+
 	for(int i=0; i<vc.size(); i++)
 	{
 		vertexList.push_back(strToFloat(vc[i]));
 	}
-	
+
 	return vertexList;
 }
 
@@ -97,7 +97,7 @@ double strToFloat(std::vector<char> charvec)
 {
 	int size = charvec.size();
 	double result = 0.0;
-	
+
 	if(charvec[0] == '-')
 	{
 		for(int i=3; i<size; i++)
