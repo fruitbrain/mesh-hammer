@@ -15,17 +15,10 @@
 
 #include "shader.h"
 
+GLFWwindow* window;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 const GLuint WIDTH = 800, HEIGHT = 600;
-
-// Square
-// GLfloat vertices[] = {
-// 	0.5f,  0.5f, 0.0f,
-// 	0.5f, -0.5f, 0.0f,
-// 	-0.5f, -0.5f, 0.0f,
-// 	-0.5f,  0.5f, 0.0f
-// };
 
 // Cube
 GLfloat vertices[] = {
@@ -77,9 +70,8 @@ GLuint indices[] = {
 	1, 2, 3
 };
 
-int main()
+void initialize()
 {
-	/* Initialize */
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -87,11 +79,11 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Plum", nullptr, nullptr);
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Plum", nullptr, nullptr);
 	if (window == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
+		return;
 	}
 	glfwMakeContextCurrent(window);
 
@@ -101,13 +93,18 @@ int main()
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Failed to initialize GLEW" << std::endl;
-		return -1;
+		return;
 	}
 
 	glViewport(0, 0, 800, 600);
 
 	/* OpenGL options */
 	glEnable(GL_DEPTH_TEST);
+}
+
+int main()
+{
+	initialize();
 
 	/* Misc variables */
 	//glm::vec3 pos_light(1.0f);
