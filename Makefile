@@ -37,7 +37,7 @@ sdl.o: sdl.cpp
 engine: main.o
 	$(CC) -o main main.o $(LDFLAGS)
 
-main.o: main.cpp shader.h
+main.o: main.cpp shader.h shader.vert shader.frag lamp.frag
 	$(CC) $(CXXFLAGS) main.cpp shader.h
 
 clean:

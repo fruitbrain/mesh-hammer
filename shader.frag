@@ -23,5 +23,5 @@ void main()
 
 	/* Sum */
 	vec3 result = (ambient + diffuse) * color_object;
-	color = vec4(result, 1.0f);
+	color = vec4(result, 0.5f);
 }
