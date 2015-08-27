@@ -18,11 +18,11 @@
 GLFWwindow* window;
 glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
 
-Shader* shader;
+Shader* shader_container;
 Shader* shader_lamp;
 
-void drawFace(GLuint vao, Shader* shader);
-void drawLamp(GLuint vao, Shader* shader);
+void draw_container(GLuint vao, Shader* shader);
+void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -114,7 +114,7 @@ int main()
 	initialize();
 
 	/* Shaders */
-	shader = new Shader("shader.vert", "shader.frag");
+	shader_container = new Shader("shader.vert", "shader.frag");
 	shader_lamp = new Shader("shader.vert", "lamp.frag");
 
 	/* Generate Opengl objects */
@@ -163,8 +163,8 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		drawFace(vao_container, shader);
-		drawLamp(vao_light, shader_lamp);
+		draw_container(vao_container, shader_container);
+		draw_lamp(vao_light, shader_lamp);
 
 		/* Swap the buffers */
 		glfwSwapBuffers(window);
@@ -172,7 +172,7 @@ int main()
 
 	glfwTerminate();
 
-	delete shader;
+	delete shader_container;
 	delete shader_lamp;
 
 	return 0;
@@ -181,7 +181,7 @@ int main()
 /**
    Single draw call for the container.
 */
-void drawFace(GLuint vao, Shader* shader)
+void draw_container(GLuint vao, Shader* shader)
 {
 	/* Matrices */
 	glm::mat4 model;
@@ -207,7 +207,7 @@ void drawFace(GLuint vao, Shader* shader)
 /**
    Single draw call for the lamp.
 */
-void drawLamp(GLuint vao, Shader* shader)
+void draw_lamp(GLuint vao, Shader* shader)
 {
 	glm::mat4 model;
 	model = glm::translate(model, pos_light);
