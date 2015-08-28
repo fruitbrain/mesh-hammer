@@ -106,7 +106,7 @@ std::vector<double> draw_mesh()
 	// Print vertexList items
 	std::cout << "Printing vertexList[]..." << std::endl;
 	for (int i=0; i<vertexList.size(); i++)
-		std::cout << vertexList[i] << std::endl;
+		std::cout << vertexList[i] << " ";
 	std::cout << std::endl;
 
 	// change std::vector<std::vector<char> > into a std::vector<int>
@@ -117,7 +117,7 @@ std::vector<double> draw_mesh()
 	// Print faceList items
 	std::cout << "Printing faceList[]..." << std::endl;
 	for (int i=0; i<faceList.size(); i++)
-		std::cout << faceList[i] << std::endl;
+		std::cout << faceList[i] << " ";
 	std::cout << std::endl;
 
 	// finally, make the vector data that is fed into the VBO
@@ -125,15 +125,15 @@ std::vector<double> draw_mesh()
 
 	for(int i=0; i<faceList.size(); i++)
 	{
-		VBOList.push_back(vertexList[faceList[i]*3-2]);
-		VBOList.push_back(vertexList[faceList[i]*3-1]);
 		VBOList.push_back(vertexList[faceList[i]*3]);
+		VBOList.push_back(vertexList[faceList[i]*3+1]);
+		VBOList.push_back(vertexList[faceList[i]*3+2]);
 	}
 	
 	// Print VBOList items
 	std::cout << "Printing VBOList[]..." << std::endl;
 	for (int i=0; i<VBOList.size(); i++)
-		std::cout << VBOList[i] << std::endl;
+		std::cout << VBOList[i] << " ";
 	std::cout << std::endl;
 
 	return VBOList;
