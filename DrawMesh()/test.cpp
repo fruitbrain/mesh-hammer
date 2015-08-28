@@ -11,7 +11,7 @@ int strToInt(std::vector<char> charvec);
 int main()
 {
 	DrawMesh();
-	//std::cout << (int)'1' << std::endl;
+	//std::cout << pow(10, -1) << std::endl;
 	return 0;
 }
 
@@ -58,6 +58,10 @@ std::vector<double> DrawMesh()
 				else
 				{
 					vc.push_back(tempvec);
+					
+					for(int i=0; i<tempvec.size(); i++)
+						std::cout << tempvec[i] << std::endl;
+					
 					tempvec.clear();
 					ifs.seekg(1, std::ios::cur);
 					std::cout << std::endl;
@@ -175,6 +179,7 @@ double strToFloat(std::vector<char> charvec)
 		std::cout << "Hey its minus" << std::endl;
 		for(int i=3; i<size; i++)
 			result += ((int)charvec[0]-48)*pow(10, -(i-2));
+			std::cout << result << std::endl;
 		return (-1.0)*result;
 	}
 	else
