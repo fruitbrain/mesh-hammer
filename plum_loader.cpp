@@ -17,7 +17,7 @@ struct Mesh {
 
 int main()
 {
-	struct Mesh mesh = plum_loader("example.plum");
+	struct Mesh mesh = plum_loader("examples/example.plum");
 
 	for (int i=0; i<mesh.vertex_count; i++) {
 		std::cout << mesh.vertex_array[i] << std::endl;
