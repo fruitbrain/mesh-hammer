@@ -2,24 +2,40 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <math.h>
 
-double* draw_mesh();
+struct Mesh plum_loader(const char* filename);
+double* plum_loader_vbo(const char* filename);
 double char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
+struct Mesh {
+	int vertex_count;
+	int face_count;
+	double* vertex_array;
+	int* face_array;
+};
+
 int main()
 {
-	draw_mesh();
-	//std::cout << (int)'1' << std::endl;
+	struct Mesh mesh = plum_loader("example.plum");
+
+	for (int i=0; i<mesh.vertex_count; i++) {
+		std::cout << mesh.vertex_array[i] << std::endl;
+	}
+	for (int i=0; i<mesh.face_count; i++) {
+		std::cout << mesh.face_array[i] << std::endl;
+	}
 	return 0;
 }
 
-double* draw_mesh()
+/**
+   Read .plum file and return resulting Mesh struct.
+*/
+struct Mesh plum_loader(const char* filename)
 {
 	// open an input stream for the file for vertex data collection
 	std::cout << "opening an input stream for the file" << std::endl;
-	std::ifstream ifs("example.plum", std::ios::in|std::ios::binary);
+	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
 
 	if(!ifs.is_open())
 		std::cerr << "ERROR : The file did not open." << std::endl;
@@ -112,15 +128,27 @@ double* draw_mesh()
 		std::cout << faceList[i] << " ";
 	std::cout << std::endl;
 
-	// finally, make the double array that is fed into the VBO
-	const int vbo_size = faceList.size() * 3;
+	// Construct the struct data
+	struct Mesh mesh;
+	mesh.vertex_count = vertexList.size();	// XXX
+	mesh.face_count = faceList.size();	// XXX
+	mesh.vertex_array = &vertexList[0];
+	mesh.face_array = &faceList[0];
+
+	return mesh;
+}
+
+double* plum_loader_vbo(const char* filename)
+{
+	struct Mesh mesh = plum_loader(filename);
+	const int vbo_size = mesh.face_count * 3;
 	double* vbo_list = new double[vbo_size];
 
-	for(int i=0; i<faceList.size(); i++)
+	for(int i=0; i<mesh.face_count; i++)
 	{
-		vbo_list[i*3]   = vertexList[faceList[i]*3];
-		vbo_list[i*3+1] = vertexList[faceList[i]*3+1];
-		vbo_list[i*3+2] = vertexList[faceList[i]*3+2];
+		vbo_list[i*3]   = mesh.vertex_array[mesh.face_array[i]*3];
+		vbo_list[i*3+1] = mesh.vertex_array[mesh.face_array[i]*3+1];
+		vbo_list[i*3+2] = mesh.vertex_array[mesh.face_array[i]*3+2];
 	}
 
 	// Print VBOList items
