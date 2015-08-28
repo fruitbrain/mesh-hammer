@@ -4,7 +4,7 @@
 #include <string>
 #include <math.h>
 
-std::vector<double> draw_mesh();
+double* draw_mesh();
 double char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
@@ -15,7 +15,7 @@ int main()
 	return 0;
 }
 
-std::vector<double> draw_mesh()
+double* draw_mesh()
 {
 	// open an input stream for the file for vertex data collection
 	std::cout << "opening an input stream for the file" << std::endl;
@@ -33,7 +33,7 @@ std::vector<double> draw_mesh()
 	// start a loop to find all the vertex data & store it in vc
 	char memblock[1];
 
-	while(true) {
+	while(!ifs.eof()) {
 		std::vector<char> tempvec;	// Only used inside while loop, so declare here
 
 		ifs.read(memblock, 1);
@@ -41,7 +41,7 @@ std::vector<double> draw_mesh()
 		if(memblock[0] == 'v') {		// Vertex line
 			ifs.seekg(1, std::ios::cur);
 
-			while(true) {
+			while (true) {
 				ifs.read(memblock, 1);
 
 				if (memblock[0] != 0x20 && memblock[0] != 0x0d) {
@@ -62,23 +62,17 @@ std::vector<double> draw_mesh()
 		} else if (memblock[0] == 'f') {	// Face line
 			ifs.seekg(1, std::ios::cur);
 
-			while(true)
-			{
+			while (true) {
 				ifs.read(memblock, 1);
 
-				if(memblock[0] != 0x20 && memblock[0] != 0x0d)
-				{
+				if(memblock[0] != 0x20 && memblock[0] != 0x0d) {
 					std::cout << memblock[0];
 					tempvec.push_back(memblock[0]);
-				}
-				else if(memblock[0] == 0x20)
-				{
+				} else if(memblock[0] == 0x20) {
 					fc.push_back(tempvec);
 					tempvec.clear();
 					std::cout << " ";
-				}
-				else
-				{
+				} else {
 					fc.push_back(tempvec);
 					tempvec.clear();
 					ifs.seekg(1, std::ios::cur);
@@ -89,8 +83,6 @@ std::vector<double> draw_mesh()
 		} else {  				// Nothing to read, skip to the next line
 			while (memblock[0] != 0x0d)
 				ifs.read(memblock, 1);
-			if(ifs.eof())	// break if end of file(eof)
-				break;
 			ifs.seekg(1, std::ios::cur);
 		}
 	}
@@ -120,23 +112,24 @@ std::vector<double> draw_mesh()
 		std::cout << faceList[i] << " ";
 	std::cout << std::endl;
 
-	// finally, make the vector data that is fed into the VBO
-	std::vector<double> VBOList;
+	// finally, make the double array that is fed into the VBO
+	const int vbo_size = faceList.size() * 3;
+	double* vbo_list = new double[vbo_size];
 
 	for(int i=0; i<faceList.size(); i++)
 	{
-		VBOList.push_back(vertexList[faceList[i]*3]);
-		VBOList.push_back(vertexList[faceList[i]*3+1]);
-		VBOList.push_back(vertexList[faceList[i]*3+2]);
+		vbo_list[i*3]   = vertexList[faceList[i]*3];
+		vbo_list[i*3+1] = vertexList[faceList[i]*3+1];
+		vbo_list[i*3+2] = vertexList[faceList[i]*3+2];
 	}
-	
+
 	// Print VBOList items
 	std::cout << "Printing VBOList[]..." << std::endl;
-	for (int i=0; i<VBOList.size(); i++)
-		std::cout << VBOList[i] << " ";
+	for (int i=0; i<vbo_size; i++)
+		std::cout << vbo_list[i] << " ";
 	std::cout << std::endl;
 
-	return VBOList;
+	return vbo_list;
 }
 
 /**
@@ -148,24 +141,6 @@ double char_vector_to_float(std::vector<char> charvec)
 	// First convert char vector into a string,
 	// and then use string STL to convert it into a double.
 
-	// int size = charvec.size();
-	// double result = 0.0;
-
-	// if(charvec[0] == '-')
-	// {
-	// 	std::cout << "Hey its minus" << std::endl;
-	// 	for(int i=3; i<size; i++)
-	// 		result += ((int)charvec[0]-48)*pow(10, -(i-2));
-	// 	return (-1.0)*result;
-	// }
-	// else
-	// {
-	// 	std::cout << "Hey its plus" << std::endl;
-	// 	for(int i=2; i<size; i++)
-	// 		result += ((int)charvec[0]-48)*pow(10, -(i-1));
-	// 	return result;
-	// }
-
 	std::string str(charvec.begin(), charvec.end());
 	return std::stod(str);
 }
@@ -175,14 +150,6 @@ double char_vector_to_float(std::vector<char> charvec)
 */
 int char_vector_to_int(std::vector<char> charvec)
 {
-	// int size = charvec.size();
-	// int result = 0;
-
-	// for(int i=0; i<size; i++)
-	// 	result += ((int)charvec[size-1-i]-48)*pow(10, i);
-
-	// return result;
-
 	std::string str(charvec.begin(), charvec.end());
 	return std::stoi(str);
 }
