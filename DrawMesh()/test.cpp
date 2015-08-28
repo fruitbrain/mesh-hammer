@@ -33,7 +33,7 @@ std::vector<double> draw_mesh()
 	// start a loop to find all the vertex data & store it in vc
 	char memblock[1];
 
-	while(!ifs.eof()) {
+	while(true) {
 		std::vector<char> tempvec;	// Only used inside while loop, so declare here
 
 		ifs.read(memblock, 1);
@@ -89,6 +89,8 @@ std::vector<double> draw_mesh()
 		} else {  				// Nothing to read, skip to the next line
 			while (memblock[0] != 0x0d)
 				ifs.read(memblock, 1);
+			if(ifs.eof())	// break if end of file(eof)
+				break;
 			ifs.seekg(1, std::ios::cur);
 		}
 	}
@@ -123,10 +125,18 @@ std::vector<double> draw_mesh()
 
 	for(int i=0; i<faceList.size(); i++)
 	{
-		//vertexList[faceList[i]];
+		VBOList.push_back(vertexList[faceList[i]*3-2]);
+		VBOList.push_back(vertexList[faceList[i]*3-1]);
+		VBOList.push_back(vertexList[faceList[i]*3]);
 	}
+	
+	// Print VBOList items
+	std::cout << "Printing VBOList[]..." << std::endl;
+	for (int i=0; i<VBOList.size(); i++)
+		std::cout << VBOList[i] << std::endl;
+	std::cout << std::endl;
 
-	return vertexList;
+	return VBOList;
 }
 
 /**
