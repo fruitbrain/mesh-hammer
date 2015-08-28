@@ -26,19 +26,19 @@ std::vector<double> draw_mesh()
 
 	std::cout << "The file opened successfully. Reading data from file to a container..." << std::endl;
 
-	// create a vector container for all of the vertex data
-	std::vector<std::vector<char> > vc;	// vertex container
-	// create a facial vertex container for all of the VBO data
-	std::vector<std::vector<char> > fc;	// face container
+	// create vector containers
+	std::vector<std::vector<char> > vc;	// vertex container for all of the vertex data
+	std::vector<std::vector<char> > fc;	// facial vertex container for all of the VBO data
 
 	// start a loop to find all the vertex data & store it in vc
-	char memblock[] = {' '};
-	std::vector<char> tempvec;
+	char memblock[1];
 
 	while(!ifs.eof()) {
+		std::vector<char> tempvec;	// Only used inside while loop, so declare here
+
 		ifs.read(memblock, 1);
 
-		if(memblock[0] == 'v') {
+		if(memblock[0] == 'v') {		// Vertex line
 			ifs.seekg(1, std::ios::cur);
 
 			while(true) {
@@ -59,50 +59,12 @@ std::vector<double> draw_mesh()
 					break;
 				}
 			}
-		} else {					  // Skip to the next line
-			while (memblock[0] != 0x0d)
-				ifs.read(memblock, 1);
-			// if(ifs.eof())
-			// 	break;
+		} else if (memblock[0] == 'f') {	// Face line
 			ifs.seekg(1, std::ios::cur);
-		}
-	}
-
-	std::cout << "Reading data finished!\n" << std::endl;
-	ifs.close();
-
-	// change std::vector<std::vector<char> > into a std::vector<double>
-	std::vector<double> vertexList;
-
-	for (int i=0; i<vc.size(); i++)
-		vertexList.push_back(char_vector_to_float(vc[i]));
-
-	// Print vertexList items
-	for (int i=0; i<vertexList.size(); i++)
-		std::cout << vertexList[i] << std::endl;
-
-	// open an input stream (again) for the (same) file for face data collection
-	std::cout << "opening an input stream for the file" << std::endl;
-	std::ifstream ifs2("example.plum", std::ios::in|std::ios::binary);
-
-	if(!ifs2.is_open())
-		std::cerr << "ERROR : The file did not open." << std::endl;
-
-	std::cout << "The file opened successfully. Reading data from file to a vector..." << std::endl;
-
-	tempvec.clear();
-
-	while(true)
-	{
-		ifs2.read(memblock, 1);
-
-		if(memblock[0] == 'f')
-		{
-			ifs2.seekg(1, std::ios::cur);
 
 			while(true)
 			{
-				ifs2.read(memblock, 1);
+				ifs.read(memblock, 1);
 
 				if(memblock[0] != 0x20 && memblock[0] != 0x0d)
 				{
@@ -119,31 +81,42 @@ std::vector<double> draw_mesh()
 				{
 					fc.push_back(tempvec);
 					tempvec.clear();
-					ifs2.seekg(1, std::ios::cur);
+					ifs.seekg(1, std::ios::cur);
 					std::cout << std::endl;
 					break;
 				}
 			}
-		}
-
-		else
-		{
-			while(memblock[0] != 0x0d)
-				ifs2.read(memblock, 1);
-			if(ifs2.eof())
-				break;
-			ifs2.seekg(1, std::ios::cur);
+		} else {  				// Nothing to read, skip to the next line
+			while (memblock[0] != 0x0d)
+				ifs.read(memblock, 1);
+			ifs.seekg(1, std::ios::cur);
 		}
 	}
+	ifs.close();
 
 	std::cout << "Reading data finished!\n" << std::endl;
-	ifs.close();
+
+	// change std::vector<std::vector<char> > into a std::vector<double>
+	std::vector<double> vertexList;
+	for (int i=0; i<vc.size(); i++)
+		vertexList.push_back(char_vector_to_float(vc[i]));
+
+	// Print vertexList items
+	std::cout << "Printing vertexList[]..." << std::endl;
+	for (int i=0; i<vertexList.size(); i++)
+		std::cout << vertexList[i] << std::endl;
+	std::cout << std::endl;
 
 	// change std::vector<std::vector<char> > into a std::vector<int>
 	std::vector<int> faceList;
-
-	for(int i=0; i<vc.size(); i++)
+	for(int i=0; i<fc.size(); i++)
 		faceList.push_back(char_vector_to_int(fc[i]));
+
+	// Print faceList items
+	std::cout << "Printing faceList[]..." << std::endl;
+	for (int i=0; i<faceList.size(); i++)
+		std::cout << faceList[i] << std::endl;
+	std::cout << std::endl;
 
 	// finally, make the vector data that is fed into the VBO
 	std::vector<double> VBOList;
@@ -192,11 +165,14 @@ double char_vector_to_float(std::vector<char> charvec)
 */
 int char_vector_to_int(std::vector<char> charvec)
 {
-	int size = charvec.size();
-	int result = 0;
+	// int size = charvec.size();
+	// int result = 0;
 
-	for(int i=0; i<size; i++)
-		result += ((int)charvec[size-1-i]-48)*pow(10, i);
+	// for(int i=0; i<size; i++)
+	// 	result += ((int)charvec[size-1-i]-48)*pow(10, i);
 
-	return result;
+	// return result;
+
+	std::string str(charvec.begin(), charvec.end());
+	return std::stoi(str);
 }
