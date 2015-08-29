@@ -8,12 +8,6 @@
 float char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
-int main()
-{
-	plum_loader("examples/example.plum");
-	return 0;
-}
-
 /**
    Read .plum file and return resulting Mesh struct.
 */

@@ -11,7 +11,6 @@ struct Mesh {
 
 	// Destructor
 	~Mesh() {
-		std::cout << "Destructing!" << std::endl;
 		delete [] vertex_array;
 		delete [] face_array;
 	}
