@@ -16,17 +16,58 @@
 #include "shader.h"
 #include "plum_loader.h"
 
-GLFWwindow* window;
-glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
-
-Shader* shader_mesh;
-Shader* shader_lamp;
-
 void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+GLFWwindow* window;
+glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
 const GLuint WIDTH = 800, HEIGHT = 600;
+
+// Cube
+GLfloat vertices_cube[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+};
 
 /**
    Initialize everything needed to show a window and an OpenGL context.
@@ -74,12 +115,16 @@ int main()
 	GLfloat* vertices = plum_loader_vbo("examples/example.plum");
 
 	/* Shaders */
+	Shader* shader_mesh;
+	Shader* shader_lamp;
 	shader_mesh = new Shader("shader.vert", "shader.frag");
 	shader_lamp = new Shader("shader.vert", "lamp.frag");
 
 	/* Generate Opengl objects */
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
+	GLuint vbo_cube;
+	glGenBuffers(1, &vbo_cube);
 
 	/* VAO for the mesh */
 	GLuint vao_mesh;
@@ -88,12 +133,15 @@ int main()
 
 	// Bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 216 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);	// FIXME
 
 	// Link vertex attributes (Important!)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);	// Is this needed?
+
 	glBindVertexArray(0);
 
 	/* VAO for the light */
@@ -101,29 +149,30 @@ int main()
 	glGenVertexArrays(1, &vao_light);
 	glBindVertexArray(vao_light);
 
-	// No need to feed data this time
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_cube);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cube), vertices_cube, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
+
 	glBindVertexArray(0);
 
+	/* Render loop */
+	while (!glfwWindowShouldClose(window)) {
+		/* Check and call events */
+		glfwPollEvents();
 
-	// /* Render loop */
-	// while (!glfwWindowShouldClose(window)) {
-	// 	/* Check and call events */
-	// 	glfwPollEvents();
+		/* Render */
+		// Reset screen
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 	/* Render */
-	// 	// Reset screen
-	// 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	// 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		draw_mesh(vao_mesh, shader_mesh);
+		draw_lamp(vao_light, shader_lamp);
 
-	// 	draw_mesh(vao_mesh, shader_mesh);
-	// 	draw_lamp(vao_light, shader_lamp);
-
-	// 	/* Swap the buffers */
-	// 	glfwSwapBuffers(window);
-	// }
+		/* Swap the buffers */
+		glfwSwapBuffers(window);
+	}
 
 	glfwTerminate();
 
@@ -155,7 +204,7 @@ void draw_mesh(GLuint vao, Shader* shader)
 	shader->set_uniform("projection", projection);
 
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDrawArrays(GL_TRIANGLES, 0, 72);
 	glBindVertexArray(0);
 }
 
