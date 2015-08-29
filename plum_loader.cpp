@@ -19,12 +19,17 @@ int main()
 {
 	struct Mesh mesh = plum_loader("examples/example.plum");
 
+	std::cout << "vertex_array after return:" << std::endl;
 	for (int i=0; i<mesh.vertex_count; i++) {
-		std::cout << mesh.vertex_array[i] << std::endl;
+		std::cout << mesh.vertex_array[i] << " ";
 	}
+	std::cout << std::endl;
+
+	std::cout << "face_array after return:" << std::endl;
 	for (int i=0; i<mesh.face_count; i++) {
-		std::cout << mesh.face_array[i] << std::endl;
+		std::cout << mesh.face_array[i] << " ";
 	}
+	std::cout << std::endl;
 	return 0;
 }
 
@@ -49,7 +54,7 @@ struct Mesh plum_loader(const char* filename)
 	// start a loop to find all the vertex data & store it in vc
 	char memblock[1];
 
-	while(!ifs.eof()) {
+	while(true) {
 		std::vector<char> tempvec;	// Only used inside while loop, so declare here
 
 		ifs.read(memblock, 1);
@@ -99,6 +104,8 @@ struct Mesh plum_loader(const char* filename)
 		} else {  				// Nothing to read, skip to the next line
 			while (memblock[0] != 0x0d)
 				ifs.read(memblock, 1);
+			if (ifs.eof())
+				break;
 			ifs.seekg(1, std::ios::cur);
 		}
 	}
@@ -134,6 +141,18 @@ struct Mesh plum_loader(const char* filename)
 	mesh.face_count = faceList.size();	// XXX
 	mesh.vertex_array = &vertexList[0];
 	mesh.face_array = &faceList[0];
+
+	std::cout << "vertex_array before return:" << std::endl;
+	for (int i=0; i<mesh.vertex_count; i++) {
+		std::cout << mesh.vertex_array[i] << " ";
+	}
+	std::cout << std::endl;
+
+	std::cout << "face_array before return:" << std::endl;
+	for (int i=0; i<mesh.face_count; i++) {
+		std::cout << mesh.face_array[i] << " ";
+	}
+	std::cout << std::endl;
 
 	return mesh;
 }
