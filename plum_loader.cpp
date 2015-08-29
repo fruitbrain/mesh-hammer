@@ -2,24 +2,26 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <math.h>
 
-std::vector<double> draw_mesh();
-double char_vector_to_float(std::vector<char> charvec);
+#include "plum_loader.h"
+
+float char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
 int main()
 {
-	draw_mesh();
-	//std::cout << (int)'1' << std::endl;
+	plum_loader("examples/example.plum");
 	return 0;
 }
 
-std::vector<double> draw_mesh()
+/**
+   Read .plum file and return resulting Mesh struct.
+*/
+struct Mesh plum_loader(const char* filename)
 {
 	// open an input stream for the file for vertex data collection
 	std::cout << "opening an input stream for the file" << std::endl;
-	std::ifstream ifs("example.plum", std::ios::in|std::ios::binary);
+	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
 
 	if(!ifs.is_open())
 		std::cerr << "ERROR : The file did not open." << std::endl;
@@ -41,7 +43,7 @@ std::vector<double> draw_mesh()
 		if(memblock[0] == 'v') {		// Vertex line
 			ifs.seekg(1, std::ios::cur);
 
-			while(true) {
+			while (true) {
 				ifs.read(memblock, 1);
 
 				if (memblock[0] != 0x20 && memblock[0] != 0x0d) {
@@ -62,23 +64,17 @@ std::vector<double> draw_mesh()
 		} else if (memblock[0] == 'f') {	// Face line
 			ifs.seekg(1, std::ios::cur);
 
-			while(true)
-			{
+			while (true) {
 				ifs.read(memblock, 1);
 
-				if(memblock[0] != 0x20 && memblock[0] != 0x0d)
-				{
+				if(memblock[0] != 0x20 && memblock[0] != 0x0d) {
 					std::cout << memblock[0];
 					tempvec.push_back(memblock[0]);
-				}
-				else if(memblock[0] == 0x20)
-				{
+				} else if(memblock[0] == 0x20) {
 					fc.push_back(tempvec);
 					tempvec.clear();
 					std::cout << " ";
-				}
-				else
-				{
+				} else {
 					fc.push_back(tempvec);
 					tempvec.clear();
 					ifs.seekg(1, std::ios::cur);
@@ -89,7 +85,7 @@ std::vector<double> draw_mesh()
 		} else {  				// Nothing to read, skip to the next line
 			while (memblock[0] != 0x0d)
 				ifs.read(memblock, 1);
-			if(ifs.eof())	// break if end of file(eof)
+			if (ifs.eof())
 				break;
 			ifs.seekg(1, std::ios::cur);
 		}
@@ -98,76 +94,69 @@ std::vector<double> draw_mesh()
 
 	std::cout << "Reading data finished!\n" << std::endl;
 
-	// change std::vector<std::vector<char> > into a std::vector<double>
-	std::vector<double> vertexList;
+	// Convert vc and fc into float and int array
+	float* vertex_array = new float[vc.size()];
 	for (int i=0; i<vc.size(); i++)
-		vertexList.push_back(char_vector_to_float(vc[i]));
+		vertex_array[i] = char_vector_to_float(vc[i]);
 
-	// Print vertexList items
-	std::cout << "Printing vertexList[]..." << std::endl;
-	for (int i=0; i<vertexList.size(); i++)
-		std::cout << vertexList[i] << " ";
-	std::cout << std::endl;
-
-	// change std::vector<std::vector<char> > into a std::vector<int>
-	std::vector<int> faceList;
+	int* face_array = new int[fc.size()];
 	for(int i=0; i<fc.size(); i++)
-		faceList.push_back(char_vector_to_int(fc[i]));
+		face_array[i] = char_vector_to_int(fc[i]);
 
-	// Print faceList items
-	std::cout << "Printing faceList[]..." << std::endl;
-	for (int i=0; i<faceList.size(); i++)
-		std::cout << faceList[i] << " ";
+	// Print arrays for debugging purpose
+	std::cout << "Printing vertex_array..." << std::endl;
+	for (int i=0; i<vc.size(); i++)
+		std::cout << vertex_array[i] << " ";
+	std::cout << std::endl;
+	std::cout << "Printing face_array..." << std::endl;
+	for (int i=0; i<fc.size(); i++)
+		std::cout << face_array[i] << " ";
 	std::cout << std::endl;
 
-	// finally, make the vector data that is fed into the VBO
-	std::vector<double> VBOList;
+	// Pack the results into a struct.
+	struct Mesh mesh;
+	mesh.vertex_count = vc.size();	// XXX
+	mesh.face_count = fc.size();	// XXX
+	mesh.vertex_array = vertex_array;
+	mesh.face_array = face_array;
 
-	for(int i=0; i<faceList.size(); i++)
-	{
-		VBOList.push_back(vertexList[faceList[i]*3]);
-		VBOList.push_back(vertexList[faceList[i]*3+1]);
-		VBOList.push_back(vertexList[faceList[i]*3+2]);
+	return mesh;
+}
+
+/**
+   Convert .plum file directly into a VBO data array.
+*/
+GLfloat* plum_loader_vbo(const char* filename)
+{
+	struct Mesh mesh = plum_loader(filename);
+	const int vbo_size = mesh.face_count * 3;
+	GLfloat* vbo_list = new GLfloat[vbo_size];
+
+	std::cout << "Vertex count: " << mesh.vertex_count << std::endl;
+	std::cout << "Face count: " << mesh.face_count << std::endl;
+
+	for (int i=0; i<mesh.face_count; i++) {
+		vbo_list[i*3]   = mesh.vertex_array[mesh.face_array[i]*3];
+		vbo_list[i*3+1] = mesh.vertex_array[mesh.face_array[i]*3+1];
+		vbo_list[i*3+2] = mesh.vertex_array[mesh.face_array[i]*3+2];
 	}
-	
+
 	// Print VBOList items
-	std::cout << "Printing VBOList[]..." << std::endl;
-	for (int i=0; i<VBOList.size(); i++)
-		std::cout << VBOList[i] << " ";
+	std::cout << "Printing vbo_list[]..." << std::endl;
+	for (int i=0; i<vbo_size; i++)
+		std::cout << vbo_list[i] << " ";
 	std::cout << std::endl;
 
-	return VBOList;
+	return vbo_list;
 }
 
 /**
    Convert vector<char> to float and return it.
 */
-double char_vector_to_float(std::vector<char> charvec)
+float char_vector_to_float(std::vector<char> charvec)
 {
-	// Method: "Let's love STL!"
-	// First convert char vector into a string,
-	// and then use string STL to convert it into a double.
-
-	// int size = charvec.size();
-	// double result = 0.0;
-
-	// if(charvec[0] == '-')
-	// {
-	// 	std::cout << "Hey its minus" << std::endl;
-	// 	for(int i=3; i<size; i++)
-	// 		result += ((int)charvec[0]-48)*pow(10, -(i-2));
-	// 	return (-1.0)*result;
-	// }
-	// else
-	// {
-	// 	std::cout << "Hey its plus" << std::endl;
-	// 	for(int i=2; i<size; i++)
-	// 		result += ((int)charvec[0]-48)*pow(10, -(i-1));
-	// 	return result;
-	// }
-
 	std::string str(charvec.begin(), charvec.end());
-	return std::stod(str);
+	return std::stof(str);
 }
 
 /**
@@ -175,14 +164,6 @@ double char_vector_to_float(std::vector<char> charvec)
 */
 int char_vector_to_int(std::vector<char> charvec)
 {
-	// int size = charvec.size();
-	// int result = 0;
-
-	// for(int i=0; i<size; i++)
-	// 	result += ((int)charvec[size-1-i]-48)*pow(10, i);
-
-	// return result;
-
 	std::string str(charvec.begin(), charvec.end());
 	return std::stoi(str);
 }
