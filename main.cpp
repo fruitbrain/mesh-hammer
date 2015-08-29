@@ -77,6 +77,9 @@ GLuint indices[] = {
 	1, 2, 3
 };
 
+/**
+   Initialize everything needed to show a window and an OpenGL context.
+*/
 void initialize()
 {
 	glfwInit();
@@ -109,6 +112,9 @@ void initialize()
 	glEnable(GL_DEPTH_TEST);
 }
 
+/**
+   Main program flow
+*/
 int main()
 {
 	initialize();
@@ -227,6 +233,9 @@ void draw_lamp(GLuint vao, Shader* shader)
 	glBindVertexArray(0);
 }
 
+/**
+   Key callback function for GLFW.
+*/
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
