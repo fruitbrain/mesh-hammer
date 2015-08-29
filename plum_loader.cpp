@@ -8,20 +8,6 @@
 float char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
-struct Mesh {
-	int vertex_count;
-	int face_count;
-	float* vertex_array;
-	int* face_array;
-
-	// Destructor
-	~Mesh() {
-		std::cout << "Destructing!" << std::endl;
-		delete [] vertex_array;
-		delete [] face_array;
-	}
-};
-
 int main()
 {
 	plum_loader("examples/example.plum");

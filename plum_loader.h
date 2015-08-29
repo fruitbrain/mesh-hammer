@@ -1,3 +1,18 @@
+struct Mesh {
+	// FIXME: document
+	int vertex_count;
+	int face_count;
+	float* vertex_array;
+	int* face_array;
+
+	// Destructor
+	~Mesh() {
+		std::cout << "Destructing!" << std::endl;
+		delete [] vertex_array;
+		delete [] face_array;
+	}
+};
+
 /**
    Read .plum file and return resulting Mesh struct.
 */
