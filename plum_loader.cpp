@@ -13,23 +13,18 @@ struct Mesh {
 	int face_count;
 	double* vertex_array;
 	int* face_array;
+
+	// Destructor
+	~Mesh() {
+		std::cout << "Destructing!" << std::endl;
+		delete [] vertex_array;
+		delete [] face_array;
+	}
 };
 
 int main()
 {
-	struct Mesh mesh = plum_loader("examples/example.plum");
-
-	std::cout << "vertex_array after return:" << std::endl;
-	for (int i=0; i<mesh.vertex_count; i++) {
-		std::cout << mesh.vertex_array[i] << " ";
-	}
-	std::cout << std::endl;
-
-	std::cout << "face_array after return:" << std::endl;
-	for (int i=0; i<mesh.face_count; i++) {
-		std::cout << mesh.face_array[i] << " ";
-	}
-	std::cout << std::endl;
+	plum_loader_vbo("examples/example.plum");
 	return 0;
 }
 
@@ -113,46 +108,31 @@ struct Mesh plum_loader(const char* filename)
 
 	std::cout << "Reading data finished!\n" << std::endl;
 
-	// change std::vector<std::vector<char> > into a std::vector<double>
-	std::vector<double> vertexList;
+	// Convert vc and fc into double and int array
+	double* vertex_array = new double[vc.size()];
 	for (int i=0; i<vc.size(); i++)
-		vertexList.push_back(char_vector_to_float(vc[i]));
+		vertex_array[i] = char_vector_to_float(vc[i]);
 
-	// Print vertexList items
-	std::cout << "Printing vertexList[]..." << std::endl;
-	for (int i=0; i<vertexList.size(); i++)
-		std::cout << vertexList[i] << " ";
-	std::cout << std::endl;
-
-	// change std::vector<std::vector<char> > into a std::vector<int>
-	std::vector<int> faceList;
+	int* face_array = new int[fc.size()];
 	for(int i=0; i<fc.size(); i++)
-		faceList.push_back(char_vector_to_int(fc[i]));
+		face_array[i] = char_vector_to_int(fc[i]);
 
-	// Print faceList items
-	std::cout << "Printing faceList[]..." << std::endl;
-	for (int i=0; i<faceList.size(); i++)
-		std::cout << faceList[i] << " ";
+	// Print arrays for debugging purpose
+	std::cout << "Printing vertex_array..." << std::endl;
+	for (int i=0; i<vc.size(); i++)
+		std::cout << vertex_array[i] << " ";
+	std::cout << std::endl;
+	std::cout << "Printing face_array..." << std::endl;
+	for (int i=0; i<fc.size(); i++)
+		std::cout << face_array[i] << " ";
 	std::cout << std::endl;
 
 	// Construct the struct data
 	struct Mesh mesh;
-	mesh.vertex_count = vertexList.size();	// XXX
-	mesh.face_count = faceList.size();	// XXX
-	mesh.vertex_array = &vertexList[0];
-	mesh.face_array = &faceList[0];
-
-	std::cout << "vertex_array before return:" << std::endl;
-	for (int i=0; i<mesh.vertex_count; i++) {
-		std::cout << mesh.vertex_array[i] << " ";
-	}
-	std::cout << std::endl;
-
-	std::cout << "face_array before return:" << std::endl;
-	for (int i=0; i<mesh.face_count; i++) {
-		std::cout << mesh.face_array[i] << " ";
-	}
-	std::cout << std::endl;
+	mesh.vertex_count = vc.size();	// XXX
+	mesh.face_count = fc.size();	// XXX
+	mesh.vertex_array = vertex_array;
+	mesh.face_array = face_array;
 
 	return mesh;
 }
