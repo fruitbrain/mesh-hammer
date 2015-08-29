@@ -34,11 +34,16 @@ sdl.o: sdl.cpp
 	$(CC) $(CXXFLAGS) sdl.cpp
 
 ## Building Graphics Engine
-engine: main.o
-	$(CC) -o main main.o $(LDFLAGS)
+engine: main.o plum_loader.o
+	$(CC) -o main main.o plum_loader.o $(LDFLAGS)
 
-main.o: main.cpp shader.h shader.vert shader.frag lamp.frag
+main.o: main.cpp shader.h plum_loader.h shader
 	$(CC) $(CXXFLAGS) main.cpp shader.h
+
+plum_loader.o: plum_loader.cpp plum_loader.h
+	$(CC) $(CXXFLAGS) plum_loader.cpp plum_loader.h
+
+shader: shader.vert shader.frag lamp.frag
 
 clean:
 	rm -f *.o *.gch plum main
