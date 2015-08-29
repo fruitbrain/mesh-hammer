@@ -4,14 +4,14 @@
 #include <string>
 
 struct Mesh plum_loader(const char* filename);
-double* plum_loader_vbo(const char* filename);
-double char_vector_to_float(std::vector<char> charvec);
+float* plum_loader_vbo(const char* filename);
+float char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
 struct Mesh {
 	int vertex_count;
 	int face_count;
-	double* vertex_array;
+	float* vertex_array;
 	int* face_array;
 
 	// Destructor
@@ -108,8 +108,8 @@ struct Mesh plum_loader(const char* filename)
 
 	std::cout << "Reading data finished!\n" << std::endl;
 
-	// Convert vc and fc into double and int array
-	double* vertex_array = new double[vc.size()];
+	// Convert vc and fc into float and int array
+	float* vertex_array = new float[vc.size()];
 	for (int i=0; i<vc.size(); i++)
 		vertex_array[i] = char_vector_to_float(vc[i]);
 
@@ -137,11 +137,11 @@ struct Mesh plum_loader(const char* filename)
 	return mesh;
 }
 
-double* plum_loader_vbo(const char* filename)
+float* plum_loader_vbo(const char* filename)
 {
 	struct Mesh mesh = plum_loader(filename);
 	const int vbo_size = mesh.face_count * 3;
-	double* vbo_list = new double[vbo_size];
+	float* vbo_list = new float[vbo_size];
 
 	for(int i=0; i<mesh.face_count; i++)
 	{
@@ -162,14 +162,14 @@ double* plum_loader_vbo(const char* filename)
 /**
    Convert vector<char> to float and return it.
 */
-double char_vector_to_float(std::vector<char> charvec)
+float char_vector_to_float(std::vector<char> charvec)
 {
 	// Method: "Let's love STL!"
 	// First convert char vector into a string,
-	// and then use string STL to convert it into a double.
+	// and then use string STL to convert it into a float.
 
 	std::string str(charvec.begin(), charvec.end());
-	return std::stod(str);
+	return std::stof(str);
 }
 
 /**
