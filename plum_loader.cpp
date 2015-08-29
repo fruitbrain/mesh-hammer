@@ -126,11 +126,11 @@ struct Mesh plum_loader(const char* filename)
 /**
    Convert .plum file directly into a VBO data array.
 */
-float* plum_loader_vbo(const char* filename)
+GLfloat* plum_loader_vbo(const char* filename)
 {
 	struct Mesh mesh = plum_loader(filename);
 	const int vbo_size = mesh.face_count * 3;
-	float* vbo_list = new float[vbo_size];
+	GLfloat* vbo_list = new GLfloat[vbo_size];
 
 	std::cout << "Vertex count: " << mesh.vertex_count << std::endl;
 	std::cout << "Face count: " << mesh.face_count << std::endl;

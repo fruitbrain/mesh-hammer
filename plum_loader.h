@@ -1,3 +1,7 @@
+// Include GL headers
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 struct Mesh {
 	// FIXME: document
 	int vertex_count;
@@ -21,4 +25,4 @@ struct Mesh plum_loader(const char* filename);
 /**
    Convert .plum file directly into a VBO data array.
 */
-float* plum_loader_vbo(const char* filename);
+GLfloat* plum_loader_vbo(const char* filename);
