@@ -24,7 +24,7 @@ struct Mesh {
 
 int main()
 {
-	plum_loader_vbo("examples/example.plum");
+	plum_loader("examples/example.plum");
 	return 0;
 }
 
@@ -127,7 +127,7 @@ struct Mesh plum_loader(const char* filename)
 		std::cout << face_array[i] << " ";
 	std::cout << std::endl;
 
-	// Construct the struct data
+	// Pack the results into a struct.
 	struct Mesh mesh;
 	mesh.vertex_count = vc.size();	// XXX
 	mesh.face_count = fc.size();	// XXX
@@ -137,21 +137,26 @@ struct Mesh plum_loader(const char* filename)
 	return mesh;
 }
 
+/**
+   Convert .plum file directly into a VBO data array.
+*/
 float* plum_loader_vbo(const char* filename)
 {
 	struct Mesh mesh = plum_loader(filename);
 	const int vbo_size = mesh.face_count * 3;
 	float* vbo_list = new float[vbo_size];
 
-	for(int i=0; i<mesh.face_count; i++)
-	{
+	std::cout << "Vertex count: " << mesh.vertex_count << std::endl;
+	std::cout << "Face count: " << mesh.face_count << std::endl;
+
+	for (int i=0; i<mesh.face_count; i++) {
 		vbo_list[i*3]   = mesh.vertex_array[mesh.face_array[i]*3];
 		vbo_list[i*3+1] = mesh.vertex_array[mesh.face_array[i]*3+1];
 		vbo_list[i*3+2] = mesh.vertex_array[mesh.face_array[i]*3+2];
 	}
 
 	// Print VBOList items
-	std::cout << "Printing VBOList[]..." << std::endl;
+	std::cout << "Printing vbo_list[]..." << std::endl;
 	for (int i=0; i<vbo_size; i++)
 		std::cout << vbo_list[i] << " ";
 	std::cout << std::endl;
@@ -164,10 +169,6 @@ float* plum_loader_vbo(const char* filename)
 */
 float char_vector_to_float(std::vector<char> charvec)
 {
-	// Method: "Let's love STL!"
-	// First convert char vector into a string,
-	// and then use string STL to convert it into a float.
-
 	std::string str(charvec.begin(), charvec.end());
 	return std::stof(str);
 }
