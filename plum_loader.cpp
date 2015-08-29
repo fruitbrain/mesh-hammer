@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 
-struct Mesh plum_loader(const char* filename);
-float* plum_loader_vbo(const char* filename);
+#include "plum_loader.h"
+
 float char_vector_to_float(std::vector<char> charvec);
 int char_vector_to_int(std::vector<char> charvec);
 
