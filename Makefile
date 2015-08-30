@@ -1,5 +1,7 @@
 SC=csc
-CC=g++
+CC=gcc
+CXX=g++
+CFLAGS=-g -Wall
 CXXFLAGS=-g -Wall -std=c++11 -fPIC
 
 UNAME=$(shell uname)
@@ -31,22 +33,25 @@ sdl-ffi.so: sdl-ffi.scm sdl.o
 	$(SC) -s sdl-ffi.scm sdl.o -c++ $(LIBS)
 
 sdl.o: sdl.cpp
-	$(CC) $(CXXFLAGS) -c sdl.cpp
+	$(CXX) $(CXXFLAGS) -c sdl.cpp
 
 ## Building Graphics Engine
 engine: main.o plum_loader.o
-	$(CC) -o main main.o plum_loader.o $(LIBS)
+	$(CXX) -o main main.o plum_loader.o $(LIBS)
 
 main.o: main.cpp shader.h plum_loader.h shader
-	$(CC) $(CXXFLAGS) -c main.cpp shader.h
+	$(CXX) $(CXXFLAGS) -c main.cpp shader.h
 
-plum_loader.so: plum_loader.o
-	$(CC) -shared -o plum_loader.so plum_loader.o $(LIBS)
+plum_loader_test: test/plum_loader_test.c libplumloader.so
+	$(CC) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
+
+libplumloader.so: plum_loader.o
+	$(CXX) -shared -o libplumloader.so plum_loader.o $(LIBS)
 
 plum_loader.o: plum_loader.cpp plum_loader.h
-	$(CC) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
+	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
 
 shader: shader.vert shader.frag lamp.frag
 
 clean:
-	rm -f *.o *.so *.gch a.out plum main
+	rm -f *.o *.so *.gch a.out plum main plum_loader_test
