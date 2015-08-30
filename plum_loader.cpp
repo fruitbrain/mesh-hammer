@@ -11,7 +11,7 @@ int char_vector_to_int(std::vector<char> charvec);
 /**
    Read .plum file and return resulting Mesh struct.
 */
-extern "C" struct Mesh plum_loader(const char* filename)
+extern "C" Mesh plum_loader(const char* filename)
 {
 	// open an input stream for the file for vertex data collection
 	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
@@ -109,7 +109,7 @@ extern "C" struct Mesh plum_loader(const char* filename)
 	std::cout << "Mesh data loading completed" << std::endl;
 
 	// Pack the results into a struct.
-	struct Mesh mesh;
+	Mesh mesh;
 	mesh.vertex_count = vc.size();	// XXX
 	mesh.face_count = fc.size();	// XXX
 	mesh.vertex_array = vertex_array;
@@ -123,7 +123,7 @@ extern "C" struct Mesh plum_loader(const char* filename)
 */
 extern "C" GLfloat* plum_loader_vbo(const char* filename)
 {
-	struct Mesh mesh = plum_loader(filename);
+	Mesh mesh = plum_loader(filename);
 	const int vbo_size = mesh.face_count * 3;
 	GLfloat* vbo_list = new GLfloat[vbo_size];
 
@@ -149,7 +149,7 @@ extern "C" GLfloat* plum_loader_vbo(const char* filename)
    Explicit destructor for struct Mesh.
    This is needed because C doensn't support destructors.
 */
-void delete_mesh(struct Mesh mesh)
+void delete_mesh(Mesh mesh)
 {
 	delete [] mesh.vertex_array;
 	delete [] mesh.face_array;
