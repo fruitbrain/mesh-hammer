@@ -20,17 +20,20 @@ struct Mesh plum_loader(const char* filename)
 	if(!ifs.is_open())
 		std::cerr << "ERROR : The file did not open." << std::endl;
 
-	std::cout << "The file opened successfully. Reading data from file to a container..." << std::endl;
+	std::cout << "The file opened successfully." << std::endl;
+	std::cout << "Reading data from file to a container..." << std::endl;
 
-	// create vector containers
-	std::vector<std::vector<char> > vc;	// vertex container for all of the vertex data
-	std::vector<std::vector<char> > fc;	// facial vertex container for all of the VBO data
+	// vertex container for all of the vertex data
+	std::vector<std::vector<char> > vc;
+	// facial vertex container for all of the VBO data
+	std::vector<std::vector<char> > fc;
 
 	// start a loop to find all the vertex data & store it in vc
 	char memblock[1];
 
 	while(true) {
-		std::vector<char> tempvec;	// Only used inside while loop, so declare here
+		// only used inside while loop, so declare here
+		std::vector<char> tempvec;
 
 		ifs.read(memblock, 1);
 
@@ -40,14 +43,15 @@ struct Mesh plum_loader(const char* filename)
 			while (true) {
 				ifs.read(memblock, 1);
 
+				// 0x20: space, 0x0d: newline
 				if (memblock[0] != 0x20 && memblock[0] != 0x0d) {
 					std::cout << memblock[0];
 					tempvec.push_back(memblock[0]);
-				} else if (memblock[0] == 0x20) { // 0x20: Space
+				} else if (memblock[0] == 0x20) {
 					vc.push_back(tempvec);
 					tempvec.clear();
 					std::cout << " ";
-				} else {			  // 0x0d: newline
+				} else {
 					vc.push_back(tempvec);
 					tempvec.clear();
 					ifs.seekg(1, std::ios::cur);
@@ -61,6 +65,7 @@ struct Mesh plum_loader(const char* filename)
 			while (true) {
 				ifs.read(memblock, 1);
 
+				// 0x20: space, 0x0d: newline
 				if(memblock[0] != 0x20 && memblock[0] != 0x0d) {
 					std::cout << memblock[0];
 					tempvec.push_back(memblock[0]);
@@ -76,7 +81,7 @@ struct Mesh plum_loader(const char* filename)
 					break;
 				}
 			}
-		} else {  				// Nothing to read, skip to the next line
+		} else { 		// Nothing to read, skip to the next line
 			while (memblock[0] != 0x0d)
 				ifs.read(memblock, 1);
 			if (ifs.eof())
@@ -90,20 +95,20 @@ struct Mesh plum_loader(const char* filename)
 
 	// Convert vc and fc into float and int array
 	float* vertex_array = new float[vc.size()];
-	for (int i=0; i<vc.size(); i++)
+	for (std::size_t i=0; i<vc.size(); i++)
 		vertex_array[i] = char_vector_to_float(vc[i]);
 
 	int* face_array = new int[fc.size()];
-	for(int i=0; i<fc.size(); i++)
+	for(std::size_t i=0; i<fc.size(); i++)
 		face_array[i] = char_vector_to_int(fc[i]);
 
 	// Print arrays for debugging purpose
 	std::cout << "Printing vertex_array..." << std::endl;
-	for (int i=0; i<vc.size(); i++)
+	for (std::size_t i=0; i<vc.size(); i++)
 		std::cout << vertex_array[i] << " ";
 	std::cout << std::endl;
 	std::cout << "Printing face_array..." << std::endl;
-	for (int i=0; i<fc.size(); i++)
+	for (std::size_t i=0; i<fc.size(); i++)
 		std::cout << face_array[i] << " ";
 	std::cout << std::endl;
 

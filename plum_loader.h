@@ -1,3 +1,5 @@
+#include <iostream>
+
 // Include GL headers
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -11,6 +13,7 @@ struct Mesh {
 
 	// Destructor
 	~Mesh() {
+		std::cout << "Destructing!" << std::endl;
 		delete [] vertex_array;
 		delete [] face_array;
 	}
