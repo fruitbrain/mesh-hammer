@@ -11,17 +11,13 @@ int char_vector_to_int(std::vector<char> charvec);
 /**
    Read .plum file and return resulting Mesh struct.
 */
-struct Mesh plum_loader(const char* filename)
+extern "C" struct Mesh plum_loader(const char* filename)
 {
 	// open an input stream for the file for vertex data collection
-	std::cout << "opening an input stream for the file" << std::endl;
 	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
 
 	if(!ifs.is_open())
 		std::cerr << "ERROR : The file did not open." << std::endl;
-
-	std::cout << "The file opened successfully." << std::endl;
-	std::cout << "Reading data from file to a container..." << std::endl;
 
 	// vertex container for all of the vertex data
 	std::vector<std::vector<char> > vc;
@@ -91,8 +87,6 @@ struct Mesh plum_loader(const char* filename)
 	}
 	ifs.close();
 
-	std::cout << "Reading data finished!\n" << std::endl;
-
 	// Convert vc and fc into float and int array
 	float* vertex_array = new float[vc.size()];
 	for (std::size_t i=0; i<vc.size(); i++)
@@ -103,14 +97,16 @@ struct Mesh plum_loader(const char* filename)
 		face_array[i] = char_vector_to_int(fc[i]);
 
 	// Print arrays for debugging purpose
-	std::cout << "Printing vertex_array..." << std::endl;
+	std::cout << "vertex_array:" << std::endl;
 	for (std::size_t i=0; i<vc.size(); i++)
 		std::cout << vertex_array[i] << " ";
 	std::cout << std::endl;
-	std::cout << "Printing face_array..." << std::endl;
+	std::cout << "face_array:" << std::endl;
 	for (std::size_t i=0; i<fc.size(); i++)
 		std::cout << face_array[i] << " ";
 	std::cout << std::endl;
+
+	std::cout << "Mesh data loading completed" << std::endl;
 
 	// Pack the results into a struct.
 	struct Mesh mesh;
@@ -125,20 +121,20 @@ struct Mesh plum_loader(const char* filename)
 /**
    Convert .plum file directly into a VBO data array.
 */
-GLfloat* plum_loader_vbo(const char* filename)
+extern "C" GLfloat* plum_loader_vbo(const char* filename)
 {
 	struct Mesh mesh = plum_loader(filename);
 	const int vbo_size = mesh.face_count * 3;
 	GLfloat* vbo_list = new GLfloat[vbo_size];
-
-	std::cout << "Vertex count: " << mesh.vertex_count << std::endl;
-	std::cout << "Face count: " << mesh.face_count << std::endl;
 
 	for (int i=0; i<mesh.face_count; i++) {
 		vbo_list[i*3]   = mesh.vertex_array[mesh.face_array[i]*3];
 		vbo_list[i*3+1] = mesh.vertex_array[mesh.face_array[i]*3+1];
 		vbo_list[i*3+2] = mesh.vertex_array[mesh.face_array[i]*3+2];
 	}
+
+	// Delete arrays of struct mesh
+	delete_mesh(mesh);
 
 	// Print VBOList items
 	std::cout << "Printing vbo_list[]..." << std::endl;
@@ -147,6 +143,16 @@ GLfloat* plum_loader_vbo(const char* filename)
 	std::cout << std::endl;
 
 	return vbo_list;
+}
+
+/**
+   Explicit destructor for struct Mesh.
+   This is needed because C doensn't support destructors.
+*/
+void delete_mesh(struct Mesh mesh)
+{
+	delete [] mesh.vertex_array;
+	delete [] mesh.face_array;
 }
 
 /**

@@ -1,4 +1,6 @@
-#include <iostream>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Include GL headers
 #define GLEW_STATIC
@@ -10,13 +12,6 @@ struct Mesh {
 	int face_count;
 	float* vertex_array;
 	int* face_array;
-
-	// Destructor
-	~Mesh() {
-		std::cout << "Destructing!" << std::endl;
-		delete [] vertex_array;
-		delete [] face_array;
-	}
 };
 
 /**
@@ -28,3 +23,13 @@ struct Mesh plum_loader(const char* filename);
    Convert .plum file directly into a VBO data array.
 */
 GLfloat* plum_loader_vbo(const char* filename);
+
+/**
+   Explicit destructor for struct Mesh.
+   This is needed because C doensn't support destructors.
+*/
+void delete_mesh(struct Mesh mesh);
+
+#ifdef __cplusplus
+}
+#endif
