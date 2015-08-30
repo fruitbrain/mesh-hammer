@@ -149,7 +149,7 @@ extern "C" GLfloat* plum_loader_vbo(const char* filename)
    Explicit destructor for struct Mesh.
    This is needed because C doensn't support destructors.
 */
-void delete_mesh(Mesh mesh)
+extern "C" void delete_mesh(Mesh mesh)
 {
 	delete [] mesh.vertex_array;
 	delete [] mesh.face_array;
