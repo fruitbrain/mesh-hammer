@@ -2,11 +2,15 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 // Include GL headers
 #define GLEW_STATIC
 #include <GL/glew.h>
 
 typedef struct Mesh {
+	/* File read status */
+	bool read_status;
 	/* Total num of vertices */
 	size_t vertex_count;
 	/* Total num of faces */

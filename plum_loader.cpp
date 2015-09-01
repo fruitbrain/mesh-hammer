@@ -16,8 +16,14 @@ extern "C" Mesh plum_loader(const char* filename)
 	// open an input stream for the file for vertex data collection
 	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
 
-	if(!ifs.is_open())
+	if(!ifs.is_open()) {
 		std::cerr << "ERROR : The file did not open." << std::endl;
+
+		/* Return fake empty struct just to bail out */
+		Mesh mesh;
+		mesh.read_status = false;
+		return mesh;
+	}
 
 	// vertex container for all of the vertex data
 	std::vector<std::vector<float> > vc;
@@ -140,6 +146,7 @@ extern "C" Mesh plum_loader(const char* filename)
 
 	// Pack the results into a struct.
 	Mesh mesh;
+	mesh.read_status = true;
 	mesh.vertex_count = vc.size();
 	mesh.face_count = fc.size();
 	mesh.vertex_array = vertex_array;

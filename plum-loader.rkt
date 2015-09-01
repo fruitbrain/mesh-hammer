@@ -7,7 +7,8 @@
   (ffi-lib "libplumloader.so"))
 
 ;; Bind CType to struct Mesh
-(define-cstruct _Mesh ([vertex_count _size]
+(define-cstruct _Mesh ([read_status _bool]
+		       [vertex_count _size]
 		       [face_count _size]
 		       [vertex_array (_cpointer (_cpointer _float))]
 		       [face_array (_cpointer (_cpointer _int))]))
@@ -17,6 +18,11 @@
 (define-plumloader delete_mesh (_fun _Mesh -> _void))
 
 (define mesh (plum_loader "examples/example.plum"))
+
+;; Check for file read status and prevent lock-down
+;; (XXX:is this always evaluated?)
+(when (eq? (Mesh-read_status mesh) #f)
+    (error "what: Failed reading data file!"))
 
 ;; Construct a list from data of pointer
 ;; read from offset begin(included) to end(excluded).
