@@ -7,9 +7,9 @@ extern "C" {
 #include <GL/glew.h>
 
 typedef struct Mesh {
-	/* Total num of the vertices */
+	/* Total num of vertices */
 	size_t vertex_count;
-	/* Total num of the faces */
+	/* Total num of faces */
 	size_t face_count;
 	/* Vertex array that consists of 3-element coordinate arrays */
 	float** vertex_array;
