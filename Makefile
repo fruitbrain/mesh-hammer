@@ -37,16 +37,16 @@ sdl.o: sdl.cpp
 
 ## Building Graphics Engine
 engine: main.o plum_loader.o
-	$(CXX) -o main main.o plum_loader.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o main main.o plum_loader.o $(LIBS)
 
 main.o: main.cpp shader.h plum_loader.h shader
 	$(CXX) $(CXXFLAGS) -c main.cpp shader.h
 
 plum_loader_test: test/plum_loader_test.c libplumloader.so
-	$(CC) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
+	$(CC) $(CFLAGS) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
 
 libplumloader.so: plum_loader.o
-	$(CXX) -shared -o libplumloader.so plum_loader.o $(LIBS)
+	$(CXX) $(CXXFLAGS)-shared -o libplumloader.so plum_loader.o $(LIBS)
 
 plum_loader.o: plum_loader.cpp plum_loader.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
