@@ -46,7 +46,7 @@ extern "C" Mesh plum_loader(const char* filename)
 				ifs.read(memblock, 1);
 
 				// 0x20: space, 0x0d: newline
-				if (memblock[0] != 0x20 && memblock[0] != 0x0d) {
+				if (memblock[0] != 0x20 && memblock[0] != 0x0a) {
 					/* Reading 1 coord */
 					tempvec.push_back(memblock[0]);
 					std::cout << memblock[0];
@@ -75,7 +75,7 @@ extern "C" Mesh plum_loader(const char* filename)
 				ifs.read(memblock, 1);
 
 				// 0x20: space, 0x0d: newline
-				if(memblock[0] != 0x20 && memblock[0] != 0x0d) {
+				if(memblock[0] != 0x20 && memblock[0] != 0x0a) {
 					/* Reading 1 index */
 					tempvec.push_back(memblock[0]);
 					std::cout << memblock[0];
@@ -96,7 +96,7 @@ extern "C" Mesh plum_loader(const char* filename)
 				}
 			}
 		} else { 		// Nothing to read, skip to the next line
-			while (memblock[0] != 0x0d)
+			while (memblock[0] != 0x0a)
 				ifs.read(memblock, 1);
 			if (ifs.eof())
 				break;
