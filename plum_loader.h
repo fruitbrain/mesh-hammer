@@ -7,11 +7,14 @@ extern "C" {
 #include <GL/glew.h>
 
 typedef struct Mesh {
-	// FIXME: document
-	int vertex_count;
-	int face_count;
-	float* vertex_array;
-	int* face_array;
+	/* Total num of the vertices */
+	size_t vertex_count;
+	/* Total num of the faces */
+	size_t face_count;
+	/* Vertex array that consists of 3-element coordinate arrays */
+	float** vertex_array;
+	/* Face array that consists of n-element vertex index arrays */
+	int** face_array;
 } Mesh;
 
 /**
