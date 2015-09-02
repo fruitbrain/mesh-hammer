@@ -7,7 +7,7 @@
 (provide load-mesh)
 
 (define-ffi-definer define-plumloader
-  (ffi-lib "libplumloader"))
+  (ffi-lib "libplumloader.so"))
 
 ;; Bind CType to struct Mesh
 (define-cstruct _Mesh ([read_status _bool]
@@ -20,14 +20,13 @@
 (define-plumloader plum_loader (_fun _string -> _Mesh))
 (define-plumloader delete_mesh (_fun _Mesh -> _void))
 
-(define loaded-mesh (plum_loader "examples/example.plum"))
-
 ;; Wrapped plum-loader that additionally checks for read status
 (define (plum-loader path)
+  (define loaded-mesh (plum_loader path))
   (begin
     (when (eq? (Mesh-read_status loaded-mesh) #f)
       (error "plum-loader: Failed reading data file!"))
-    (plum_loader path)))
+    loaded-mesh))
 
 ;; Construct a list from data of pointer
 ;; read from offset begin(included) to end(excluded).
@@ -68,6 +67,4 @@
 		 (extract-faces c-mesh))
     (delete_mesh c-mesh)))
 
-;; Free memory of Mesh (important!)
-(delete_mesh loaded-mesh)
-
+(load-mesh "examples/example.plum1")
