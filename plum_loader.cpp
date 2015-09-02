@@ -14,7 +14,7 @@ int char_vector_to_int(std::vector<char> charvec);
 extern "C" Mesh plum_loader(const char* filename)
 {
 	// open an input stream for the file for vertex data collection
-	std::ifstream ifs(filename, std::ios::in|std::ios::binary);
+	std::ifstream ifs(filename, std::ios::in);
 
 	if(!ifs.is_open()) {
 		std::cerr << "ERROR : The file did not open." << std::endl;
@@ -62,7 +62,7 @@ extern "C" Mesh plum_loader(const char* filename)
 					tempvec.clear();
 					std::cout << std::endl;
 
-					ifs.seekg(1, std::ios::cur);
+					//ifs.seekg(1, std::ios::cur);
 					break;
 				}
 			}
@@ -91,7 +91,7 @@ extern "C" Mesh plum_loader(const char* filename)
 					tempvec.clear();
 					std::cout << std::endl;
 
-					ifs.seekg(1, std::ios::cur);
+					//ifs.seekg(1, std::ios::cur);
 					break;
 				}
 			}
@@ -100,7 +100,7 @@ extern "C" Mesh plum_loader(const char* filename)
 				ifs.read(memblock, 1);
 			if (ifs.eof())
 				break;
-			ifs.seekg(1, std::ios::cur);
+			//ifs.seekg(1, std::ios::cur);
 		}
 	}
 	std::cout << std::endl;
