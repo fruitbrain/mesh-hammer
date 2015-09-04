@@ -16,11 +16,10 @@
 		       [vertex_array (_cpointer (_cpointer _float))]
 		       [face_array (_cpointer (_cpointer _int))]))
 
-;; Bind functions
 (define-plumloader plum_loader (_fun _string -> _Mesh))
 (define-plumloader delete_mesh (_fun _Mesh -> _void))
 
-;; Wrapped plum-loader that additionally checks for read status
+;; Safer plum-loader that additionally checks for read status
 (define (plum-loader path)
   (define loaded-mesh (plum_loader path))
   (begin
@@ -41,9 +40,9 @@
 
 ;; Extract and convert vertices data from a C mesh object
 (define (extract-vertices c-mesh)
-  (define vertex-count (Mesh-vertex_count c-mesh))
-  (define vertex-array (Mesh-vertex_array c-mesh))
-  (define ptr-array (pointer->vector vertex-array (_cpointer _float) 0 vertex-count))
+  (define vtx-count (Mesh-vertex_count c-mesh))
+  (define vtx-array (Mesh-vertex_array c-mesh))
+  (define ptr-array (pointer->vector vtx-array (_cpointer _float) 0 vtx-count))
   (vector-map (lambda (ptr) (pointer->vector ptr _float 0 3)) ptr-array))
 
 ;; Extract and convert faces data from a C mesh object
