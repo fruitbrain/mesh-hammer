@@ -44,7 +44,6 @@
   (define vertex-count (Mesh-vertex_count c-mesh))
   (define vertex-array (Mesh-vertex_array c-mesh))
   (define ptr-array (pointer->vector vertex-array (_cpointer _float) 0 vertex-count))
-
   (vector-map (lambda (ptr) (pointer->vector ptr _float 0 3)) ptr-array))
 
 ;; Extract and convert faces data from a C mesh object
@@ -55,16 +54,12 @@
   (define (face-pointer->vector ptr)
     (define size (ptr-ref ptr _int 0))
     (pointer->vector ptr _int 1 (+ size 1)))
-
   (vector-map face-pointer->vector ptr-array))
 
 ;; Load Racket mesh object from the data file at path
 (define (load-mesh path)
   (define c-mesh (plum-loader path))
-
   (begin0
-      (mesh-data (extract-vertices c-mesh)
+    (mesh-data (extract-vertices c-mesh)
 		 (extract-faces c-mesh))
     (delete_mesh c-mesh)))
-
-(load-mesh "examples/example.plum")
