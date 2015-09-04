@@ -1,26 +1,54 @@
-#lang racket/base
+#lang racket
 
 (provide mesh-data
-	 get-vertices
-	 get-faces
 	 get-vertex
-	 get-face)
+	 get-vertices
+	 get-face
+	 get-faces
+	 get-face-count
+	 get-face-vertex
+	 get-face-vertex-all
+	 get-face-vertex-count
+	 vboify
+	 vector-flatten)
 
-;; Struct data that represents a mesh
 (struct mesh-data (vertices faces))
 
-;; Get vertex list from mesh object
+;;; Basic mesh access
+
 (define (get-vertices mesh)
   (mesh-data-vertices mesh))
 
-;; Get face index list from mesh object
-(define (get-faces mesh)
-  (mesh-data-faces mesh))
-
-;; Get a vertex of index from mesh object
 (define (get-vertex mesh index)
   (vector-ref (get-vertices mesh) index))
 
-;; Get a face of index from mesh object
+(define (get-faces mesh)
+  (mesh-data-faces mesh))
+
 (define (get-face mesh index)
   (vector-ref (get-faces mesh) index))
+
+(define (get-face-count mesh)
+  (vector-length (get-faces mesh)))
+
+(define (get-face-vertex face index vertices)
+  (vector-ref vertices (vector-ref face index)))
+
+(define (get-face-vertex-all face vertices)
+  (list->vector (map (lambda (idx) (get-face-vertex face idx vertices))
+		     (range 0 (get-face-vertex-count face)))))	; XXX:inefficient (list->vector)
+
+(define (get-face-vertex-count face)
+  (vector-length face))
+
+;;; Mesh to VBO data conversion
+
+(define (vboify mesh)
+  (define vertices (get-vertices mesh))
+  (define faces (get-faces mesh))
+  (define flatten-me
+    (vector-map (lambda (face) (get-face-vertex-all face vertices)) faces))
+  (vector-flatten (vector-flatten flatten-me)))
+
+(define (vector-flatten vec)
+  (apply vector-append (vector->list vec)))	      ; XXX:inefficient (vector->list)
