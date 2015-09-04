@@ -67,4 +67,4 @@
 		 (extract-faces c-mesh))
     (delete_mesh c-mesh)))
 
-(load-mesh "examples/example.plum1")
+(load-mesh "examples/example.plum")
