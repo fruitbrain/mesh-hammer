@@ -35,3 +35,6 @@ main
 *.swo
 *.swp
 *~
+
+# Racket
+compiled/
