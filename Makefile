@@ -48,7 +48,7 @@ plum_loader_test: test/plum_loader_test.c libplumloader.so
 libplumloader.so: plum_loader.o
 	$(CXX) -shared -o libplumloader.so plum_loader.o $(LIBS)
 
-plum_loader.o: plum_loader.cpp plum_loader.h
+plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
 
 shader: shader.vert shader.frag lamp.frag
