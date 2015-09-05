@@ -1,0 +1,21 @@
+## Sending mesh data from Racket to C
+
+There are two ways:
+
+* Flatten Racket mesh into a giant array and send to C
+  + May introduce less bugs
+  - Inefficient in converting list to vector and back and forth:
+    - Homemade vector-flatten and vector-apply are inefficient
+    - vector-append might be expensive (and list append without a doubt)
+    - list->pointer conversion function only receives list; mesh is vector
+  - Have to send C the whole changeset of VBO array, which is bulky
+    (since C is not aware of Mesh data anymore)
+
+* Convert Racket mesh into C struct and flatten it there
+  + Expected to be faster
+  + More uniform code, since the C struct is the only ring of connection
+    between Racket and C
+  + Only have to send idiomatic changeset (eg. move 11th vector by delta-vector)
+    which is cheap and cool
+  - May introduce more bugs
+  - Have to fiddle with list lengths
