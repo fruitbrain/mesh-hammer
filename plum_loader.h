@@ -2,7 +2,6 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 // Include GL headers
 #define GLEW_STATIC
 #include <GL/glew.h>

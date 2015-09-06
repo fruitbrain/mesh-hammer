@@ -1,3 +1,12 @@
+#ifndef _MESH_H_
+#define _MESH_H_
+
+#ifndef __cplusplus
+#include <stdbool>
+#endif
+
+/* C struct representation of the mesh data of an object
+   Will be directly converted to and from Racket data */
 typedef struct Mesh {
 	/* File read status */
 	bool read_status;
@@ -10,3 +19,5 @@ typedef struct Mesh {
 	/* Face array that consists of n-element vertex index arrays */
 	int** face_array;
 } Mesh;
+
+#endif

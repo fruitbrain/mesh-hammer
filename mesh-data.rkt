@@ -1,6 +1,15 @@
 #lang racket
 
+(require ffi/unsafe)
+
 (provide mesh-data
+	 _Mesh
+	 Mesh-read_status
+	 Mesh-vertex_count
+	 Mesh-face_count
+	 Mesh-vertex_array
+	 Mesh-face_array
+	 make-Mesh
 	 get-vertex
 	 get-vertices
 	 get-face
@@ -13,6 +22,13 @@
 	 vector-flatten)
 
 (struct mesh-data (vertices faces))
+
+;; Binding type for C Mesh struct
+(define-cstruct _Mesh ([read_status _bool]
+		       [vertex_count _size]
+		       [face_count _size]
+		       [vertex_array (_cpointer (_cpointer _float))]
+		       [face_array (_cpointer (_cpointer _int))]))
 
 ;;; Basic mesh access
 

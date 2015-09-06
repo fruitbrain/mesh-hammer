@@ -9,13 +9,6 @@
 (define-ffi-definer define-plumloader
   (ffi-lib "libplumloader.so"))
 
-;; Bind CType to struct Mesh
-(define-cstruct _Mesh ([read_status _bool]
-		       [vertex_count _size]
-		       [face_count _size]
-		       [vertex_array (_cpointer (_cpointer _float))]
-		       [face_array (_cpointer (_cpointer _int))]))
-
 (define-plumloader plum_loader (_fun _string -> _Mesh))
 (define-plumloader delete_mesh (_fun _Mesh -> _void))
 
