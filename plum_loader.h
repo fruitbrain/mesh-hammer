@@ -23,6 +23,8 @@ GLfloat* plum_loader_vbo(const char* filename);
 */
 void delete_mesh(Mesh mesh);
 
+void array_test(float** arr);
+
 #ifdef __cplusplus
 }
 #endif

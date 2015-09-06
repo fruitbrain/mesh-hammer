@@ -1,15 +1,10 @@
 #lang racket
 
-(require ffi/unsafe)
+(require ffi/unsafe
+	 ffi/vector
+	 ffi/cvector)
 
 (provide mesh-data
-	 _Mesh
-	 Mesh-read_status
-	 Mesh-vertex_count
-	 Mesh-face_count
-	 Mesh-vertex_array
-	 Mesh-face_array
-	 make-Mesh
 	 get-vertex
 	 get-vertices
 	 get-face
@@ -18,17 +13,16 @@
 	 get-face-vertex
 	 get-face-vertex-all
 	 get-face-vertex-count
-	 vboify
-	 vector-flatten)
+	 _Mesh
+	 Mesh-read_status
+	 Mesh-vertex_count
+	 Mesh-face_count
+	 Mesh-vertex_array
+	 Mesh-face_array
+	 make-Mesh
+	 vertices->ppointer)
 
 (struct mesh-data (vertices faces))
-
-;; Binding type for C Mesh struct
-(define-cstruct _Mesh ([read_status _bool]
-		       [vertex_count _size]
-		       [face_count _size]
-		       [vertex_array (_cpointer (_cpointer _float))]
-		       [face_array (_cpointer (_cpointer _int))]))
 
 ;;; Basic mesh access
 
@@ -57,14 +51,25 @@
 (define (get-face-vertex-count face)
   (vector-length face))
 
-;;; Mesh to VBO data conversion
+;;; Racket mesh to C struct conversion
 
-(define (vboify mesh)
-  (define vertices (get-vertices mesh))
-  (define faces (get-faces mesh))
-  (define flatten-me
-    (vector-map (lambda (face) (get-face-vertex-all face vertices)) faces))
-  (vector-flatten (vector-flatten flatten-me)))
+(define-cstruct _Mesh ([read_status _bool]
+		       [vertex_count _size]
+		       [face_count _size]
+		       [vertex_array (_cpointer 'float-ptr)]
+		       [face_array (_cpointer 'int-ptr)]))
 
-(define (vector-flatten vec)
-  (apply vector-append (vector->list vec)))	      ; XXX:inefficient (vector->list)
+(define (mesh-racket->c mesh)
+  (let ([vertices (get-vertices mesh)]
+	[faces (get-faces mesh)])
+    'undefined))
+
+(define (vertices->ppointer vertices)
+  (define vtx-ptr-lst
+    (vector->list
+     (vector-map (compose list->f32vector vector->list)
+		 vertices)))
+  (define untagged-pptr (cvector-ptr (list->cvector vtx-ptr-lst _f32vector)))
+  (begin
+    (cpointer-push-tag! untagged-pptr 'float-ptr)
+    untagged-pptr))

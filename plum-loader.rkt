@@ -2,6 +2,7 @@
 
 (require ffi/unsafe
 	 ffi/unsafe/define
+	 ffi/vector
 	 "mesh-data.rkt")
 
 (provide load-mesh)

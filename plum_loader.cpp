@@ -198,6 +198,12 @@ extern "C" void delete_mesh(Mesh mesh)
 	delete [] mesh.face_array;
 }
 
+extern "C" void array_test(float** arr)
+{
+	std::cout << arr[0][0] << arr[0][1] << std::endl;
+	std::cout << arr[1][0] << arr[1][1] << std::endl;
+}
+
 /**
    Convert vector<char> to float and return it.
 */
