@@ -1,8 +1,13 @@
 #lang racket/base
 
 (require rackunit
+	 ffi/unsafe
 	 "mesh-data.rkt"
 	 "plum-loader.rkt")
+
+(require/expose "mesh-data.rkt"
+		(_float-ptr
+		 vertices->ppointer))
 
 (define test-mesh (load-mesh "examples/example.plum"))
 (define test-vertices (get-vertices test-mesh))
@@ -22,8 +27,6 @@
 	       3))
 
 (test-case
- "Mesh to VBO conversion"
- (check-equal? (vector-length (vboify test-mesh))
-	       (* (get-face-count test-mesh) 3 3))
- (check-equal? (vector-flatten #(#(1 2) #(3 4) #(5 6)))
-	       #(1 2 3 4 5 6)))
+ "vertices->ppointer returns double pointer?"
+ (check-true (cpointer? (vertices->ppointer test-vertices)))
+ (check-true (cpointer? (ptr-ref (vertices->ppointer test-vertices) (_cpointer _float-ptr) 0))))

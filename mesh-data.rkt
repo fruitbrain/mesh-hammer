@@ -19,8 +19,7 @@
 	 Mesh-face_count
 	 Mesh-vertex_array
 	 Mesh-face_array
-	 make-Mesh
-	 vertices->ppointer)
+	 make-Mesh)
 
 (struct mesh-data (vertices faces))
 
