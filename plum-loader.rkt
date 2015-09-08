@@ -57,3 +57,6 @@
     (mesh-data (extract-vertices c-mesh)
 	       (extract-faces c-mesh))
     (delete_mesh c-mesh)))
+
+;(define-plumloader array_return_2d (_fun -> (_array/list _f32vector 2)))
+;(array_return_2d)

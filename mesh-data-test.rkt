@@ -28,5 +28,4 @@
 
 (test-case
  "vertices->ppointer returns double pointer?"
- (check-true (cpointer? (vertices->ppointer test-vertices)))
- (check-true (cpointer? (ptr-ref (vertices->ppointer test-vertices) (_cpointer _float-ptr) 0))))
+ (check-true (cpointer? (vertices->ppointer test-vertices))))

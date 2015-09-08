@@ -31,6 +31,9 @@
 (define (get-vertex mesh index)
   (vector-ref (get-vertices mesh) index))
 
+(define (get-vertex-count mesh)
+  (vector-length (get-vertices mesh)))
+
 (define (get-faces mesh)
   (mesh-data-faces mesh))
 
@@ -73,3 +76,22 @@
   (begin
     (cpointer-push-tag! untagged-pptr _float-ptr)
     untagged-pptr))
+
+(define (faces->ppointer faces)
+  (define (prepend-length face)
+    (cons (length face) face))
+  (define face-ptr-lst
+    (vector->list
+     ;; For some reason, list->s32vectors converts all s32vector to pointers
+     (vector-map (compose list->s32vector prepend-length) faces)))
+  (define untagged-pptr (cvector-ptr (list->cvector face-ptr-lst _s32vector)))
+  (begin
+    (cpointer-push-tag! untagged-pptr _int-ptr)
+    untagged-pptr))
+
+(define (mesh-data->_Mesh mesh)
+  (let ([vertex_count (get-vertex-count mesh)]
+	[face_count (get-face-count mesh)]
+	[vertex_array (vertices->ppointer (get-vertices mesh))]
+	[face_array (faces->ppointer (get-faces mesh))])
+    (make-Mesh #t vertex_count face_count vertex_array face_array)))
