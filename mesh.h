@@ -2,7 +2,8 @@
 #define _MESH_H_
 
 #ifndef __cplusplus
-#include <stdbool>
+#include <stdbool.h>
+#include <stddef.h>
 #endif
 
 /* C struct representation of the mesh data of an object

@@ -13,6 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "graphics.h"
 #include "shader.h"
 #include "plum_loader.h"
 
@@ -72,7 +73,7 @@ GLfloat vertices_cube[] = {
 /**
    Initialize everything needed to show a window and an OpenGL context.
 */
-void initialize()
+extern "C" void initialize()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -107,7 +108,7 @@ void initialize()
 /**
    Main program flow
 */
-int main()
+extern "C" int program()
 {
 	initialize();
 

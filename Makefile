@@ -36,11 +36,17 @@ sdl.o: sdl.cpp
 	$(CXX) $(CXXFLAGS) -c sdl.cpp
 
 ## Building Graphics Engine
-engine: main.o plum_loader.o
-	$(CXX) -o main main.o plum_loader.o $(LIBS)
+engine: graphics.o plum_loader.o
+	$(CXX) -o graphics graphics.o plum_loader.o $(LIBS)
 
-main.o: main.cpp shader.h plum_loader.h shader
-	$(CXX) $(CXXFLAGS) -c main.cpp shader.h
+graphics_test: graphics_test.c libplumgraphics.so
+	$(CC) $(CFLAGS) -o graphics_test graphics_test.c -L. -lplumgraphics
+
+libplumgraphics.so: graphics.o libplumloader.so
+	$(CXX) -shared -o libplumgraphics.so graphics.o $(LIBS) -L. -lplumloader
+
+graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader
+	$(CXX) $(CXXFLAGS) -c graphics.cpp shader.h
 
 plum_loader_test: test/plum_loader_test.c libplumloader.so
 	$(CC) $(CFLAGS) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
@@ -51,7 +57,7 @@ libplumloader.so: plum_loader.o
 plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
 
-shader: shader.vert shader.frag lamp.frag
+shader: shader.h shader.vert shader.frag lamp.frag
 
 clean:
-	rm -f *.o *.so *.gch a.out plum main plum_loader_test
+	rm -rf *.o *.so *.gch *.dSYM a.out plum graphics graphics_test
