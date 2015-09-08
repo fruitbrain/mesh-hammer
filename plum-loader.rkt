@@ -3,6 +3,7 @@
 (require ffi/unsafe
 	 ffi/unsafe/define
 	 ffi/vector
+	 ffi/cvector
 	 "mesh-data.rkt")
 
 (provide load-mesh)
@@ -54,5 +55,5 @@
   (define c-mesh (plum-loader path))
   (begin0
     (mesh-data (extract-vertices c-mesh)
-		 (extract-faces c-mesh))
+	       (extract-faces c-mesh))
     (delete_mesh c-mesh)))

@@ -25,6 +25,9 @@ void delete_mesh(Mesh mesh);
 
 void array_test(float** arr);
 
+float* array_return_1d();
+float** array_return_2d();
+
 #ifdef __cplusplus
 }
 #endif

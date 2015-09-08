@@ -204,6 +204,24 @@ extern "C" void array_test(float** arr)
 	std::cout << arr[1][0] << arr[1][1] << std::endl;
 }
 
+extern "C" float* array_return_1d()
+{
+	float* arr = new float[3];
+	arr[0] = 0.0;
+	arr[1] = 1.0;
+	arr[2] = 2.0;
+	return arr;
+}
+
+extern "C" float** array_return_2d()
+{
+	float** arr = new float*[2];
+	for (int i=0; i<2; i++) {
+		arr[i] = new float[3];
+	}
+	return arr;
+}
+
 /**
    Convert vector<char> to float and return it.
 */

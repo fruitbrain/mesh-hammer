@@ -53,11 +53,13 @@
 
 ;;; Racket mesh to C struct conversion
 
+(define _float-ptr 'float-ptr)
+(define _int-ptr 'int-ptr)
 (define-cstruct _Mesh ([read_status _bool]
 		       [vertex_count _size]
 		       [face_count _size]
-		       [vertex_array (_cpointer 'float-ptr)]
-		       [face_array (_cpointer 'int-ptr)]))
+		       [vertex_array (_cpointer _float-ptr)]
+		       [face_array (_cpointer _int-ptr)]))
 
 (define (mesh-racket->c mesh)
   (let ([vertices (get-vertices mesh)]
@@ -71,5 +73,5 @@
 		 vertices)))
   (define untagged-pptr (cvector-ptr (list->cvector vtx-ptr-lst _f32vector)))
   (begin
-    (cpointer-push-tag! untagged-pptr 'float-ptr)
+    (cpointer-push-tag! untagged-pptr _float-ptr)
     untagged-pptr))
