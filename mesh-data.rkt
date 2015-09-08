@@ -41,14 +41,14 @@
   (vector-length (get-faces mesh)))
 
 (define (get-face-vertex face index vertices)
-  (vector-ref vertices (vector-ref face index)))
+  (vector-ref vertices (list-ref face index)))
 
 (define (get-face-vertex-all face vertices)
   (list->vector (map (lambda (idx) (get-face-vertex face idx vertices))
 		     (range 0 (get-face-vertex-count face)))))	; XXX:inefficient (list->vector)
 
 (define (get-face-vertex-count face)
-  (vector-length face))
+  (length face))
 
 ;;; Racket mesh to C struct conversion
 
@@ -68,8 +68,7 @@
 (define (vertices->ppointer vertices)
   (define vtx-ptr-lst
     (vector->list
-     (vector-map (compose list->f32vector vector->list)
-		 vertices)))
+     (vector-map list->f32vector vertices)))
   (define untagged-pptr (cvector-ptr (list->cvector vtx-ptr-lst _f32vector)))
   (begin
     (cpointer-push-tag! untagged-pptr _float-ptr)

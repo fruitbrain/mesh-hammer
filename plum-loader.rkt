@@ -37,18 +37,18 @@
 (define (extract-vertices c-mesh)
   (let* ([vtx-count (Mesh-vertex_count c-mesh)]
 	 [vtx-array (Mesh-vertex_array c-mesh)]
-	 [ptr-array (pointer->vector vtx-array (_cpointer _float) 0 vtx-count)])
-    (vector-map (lambda (ptr) (pointer->vector ptr _float 0 3)) ptr-array)))
+	 [vtx-ptr (pointer->vector vtx-array (_cpointer _float) 0 vtx-count)])
+    (vector-map (lambda (ptr) (pointer->list ptr _float 0 3)) vtx-ptr)))
 
 ;; Extract and convert faces data from a C mesh object
 (define (extract-faces c-mesh)
-  (define (face-pointer->vector ptr)
+  (define (face-pointer->list ptr)
     (let ([size (ptr-ref ptr _int 0)])
-      (pointer->vector ptr _int 1 (+ size 1))))
+      (pointer->list ptr _int 1 (+ size 1))))
   (let* ([face-count (Mesh-face_count c-mesh)]
 	 [face-array (Mesh-face_array c-mesh)]
-	 [ptr-array  (pointer->vector face-array (_cpointer _int) 0 face-count)])
-    (vector-map face-pointer->vector ptr-array)))
+	 [face-ptr  (pointer->vector face-array (_cpointer _int) 0 face-count)])
+    (vector-map face-pointer->list face-ptr)))
 
 ;; Load Racket mesh object from the data file at path
 (define (load-mesh path)

@@ -16,13 +16,13 @@
 (test-case
  "Basic mesh access"
  (check-equal? (get-vertex test-mesh 5)
-	       #(-0.5 0.5 -0.5))
+	       '(-0.5 0.5 -0.5))
  (check-equal? (get-face test-mesh 23)
-	       #(4 0 11))
+	       '(4 0 11))
  (check-equal? (get-face-count test-mesh)
 	       24)
  (check-equal? (get-face-vertex test-face 1 test-vertices)
-	       #(-0.5 -0.5 0.5))
+	       '(-0.5 -0.5 0.5))
  (check-equal? (get-face-vertex-count test-face)
 	       3))
 
