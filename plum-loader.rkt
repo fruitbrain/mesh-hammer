@@ -25,8 +25,8 @@
 ;; Construct a list from data of pointer
 ;; read from offset begin(included) to end(excluded).
 (define (pointer->list p type begin end)
-  (if (>= begin (- end 1))
-      (list (ptr-ref p type begin))
+  (if (>= begin end)
+      empty
       (cons (ptr-ref p type begin) (pointer->list p type (+ begin 1) end))))
 
 ;; Same with pointer->list, except result is a vector.
