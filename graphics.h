@@ -1,8 +1,8 @@
+#ifdef __cplusplus
 // We may strip these bunch of #include lines when compiling against C,
 // because these header files are already compiled and linked into the .so file.
 // These are only here to not clutter already long .cpp files anymore with
 // #include lines.
-#ifdef __cplusplus
 #include <iostream>
 #include <cmath>
 
