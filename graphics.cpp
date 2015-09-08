@@ -1,21 +1,4 @@
-#include <iostream>
-#include <cmath>
-
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
-
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "graphics.h"
-#include "shader.h"
-#include "plum_loader.h"
 
 void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);

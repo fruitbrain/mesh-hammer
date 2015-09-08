@@ -1,10 +1,16 @@
 #ifdef __cplusplus
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
 extern "C" {
 #endif
 
-// Include GL headers
+// For GLfloat
 #define GLEW_STATIC
 #include <GL/glew.h>
+
 #include "mesh.h"	
 
 /**

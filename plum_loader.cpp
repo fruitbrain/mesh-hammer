@@ -1,8 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-
 #include "plum_loader.h"
 
 float char_vector_to_float(std::vector<char> charvec);

@@ -1,7 +1,10 @@
 #ifndef _MESH_H_
 #define _MESH_H_
 
-#ifndef __cplusplus
+// For size_t and bool(C)
+#ifdef __cplusplus
+#include <cstddef>
+#else
 #include <stdbool.h>
 #include <stddef.h>
 #endif
