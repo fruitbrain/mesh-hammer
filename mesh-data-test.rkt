@@ -5,10 +5,6 @@
 	 "mesh-data.rkt"
 	 "plum-loader.rkt")
 
-(require/expose "mesh-data.rkt"
-		(_float-ptr
-		 vertices->ppointer))
-
 (define test-mesh (load-mesh "examples/example.plum"))
 (define test-vertices (get-vertices test-mesh))
 (define test-face (get-face test-mesh 23))
@@ -23,9 +19,7 @@
 	       24)
  (check-equal? (get-face-vertex test-face 1 test-vertices)
 	       '(-0.5 -0.5 0.5))
+ (check-equal? (vector-length (get-face-vertex-all test-face test-vertices))
+	       3)
  (check-equal? (get-face-vertex-count test-face)
 	       3))
-
-(test-case
- "vertices->ppointer returns double pointer?"
- (check-true (cpointer? (vertices->ppointer test-vertices))))

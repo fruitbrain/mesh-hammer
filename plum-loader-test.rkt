@@ -7,7 +7,8 @@
 
 (require/expose "plum-loader.rkt"
 		(pointer->list
-		 pointer->vector))
+		 pointer->vector
+		 vertices->ppointer))
 
 (define test-svec (s32vector 1 2 3 4 5))
 (define test-ptr (s32vector->cpointer test-svec))

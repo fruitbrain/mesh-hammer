@@ -1,25 +1,15 @@
 #lang racket
 
-(require ffi/unsafe
-	 ffi/vector
-	 ffi/cvector)
-
 (provide mesh-data
 	 get-vertex
+	 get-vertex-count
 	 get-vertices
 	 get-face
 	 get-faces
 	 get-face-count
 	 get-face-vertex
 	 get-face-vertex-all
-	 get-face-vertex-count
-	 _Mesh
-	 Mesh-read_status
-	 Mesh-vertex_count
-	 Mesh-face_count
-	 Mesh-vertex_array
-	 Mesh-face_array
-	 make-Mesh)
+	 get-face-vertex-count)
 
 (struct mesh-data (vertices faces))
 
@@ -48,50 +38,7 @@
 
 (define (get-face-vertex-all face vertices)
   (list->vector (map (lambda (idx) (get-face-vertex face idx vertices))
-		     (range 0 (get-face-vertex-count face)))))	; XXX:inefficient (list->vector)
+		     (range 0 (get-face-vertex-count face)))))
 
 (define (get-face-vertex-count face)
   (length face))
-
-;;; Racket mesh to C struct conversion
-
-(define _float-ptr 'float-ptr)
-(define _int-ptr 'int-ptr)
-(define-cstruct _Mesh ([read_status _bool]
-		       [vertex_count _size]
-		       [face_count _size]
-		       [vertex_array (_cpointer _float-ptr)]
-		       [face_array (_cpointer _int-ptr)]))
-
-(define (mesh-racket->c mesh)
-  (let ([vertices (get-vertices mesh)]
-	[faces (get-faces mesh)])
-    'undefined))
-
-(define (vertices->ppointer vertices)
-  (define vtx-ptr-lst
-    (vector->list
-     (vector-map list->f32vector vertices)))
-  (define untagged-pptr (cvector-ptr (list->cvector vtx-ptr-lst _f32vector)))
-  (begin
-    (cpointer-push-tag! untagged-pptr _float-ptr)
-    untagged-pptr))
-
-(define (faces->ppointer faces)
-  (define (prepend-length face)
-    (cons (length face) face))
-  (define face-ptr-lst
-    (vector->list
-     ;; For some reason, list->s32vectors converts all s32vector to pointers
-     (vector-map (compose list->s32vector prepend-length) faces)))
-  (define untagged-pptr (cvector-ptr (list->cvector face-ptr-lst _s32vector)))
-  (begin
-    (cpointer-push-tag! untagged-pptr _int-ptr)
-    untagged-pptr))
-
-(define (mesh-data->_Mesh mesh)
-  (let ([vertex_count (get-vertex-count mesh)]
-	[face_count (get-face-count mesh)]
-	[vertex_array (vertices->ppointer (get-vertices mesh))]
-	[face_array (faces->ppointer (get-faces mesh))])
-    (make-Mesh #t vertex_count face_count vertex_array face_array)))
