@@ -19,7 +19,7 @@
 		       [face_array (_cpointer _int-ptr)]))
 
 (define-ffi-definer define-plumloader
-  (ffi-lib "libplumloader.so"))
+  (ffi-lib "libplumloader"))
 
 (define-plumloader plum_loader (_fun _string -> _Mesh))
 (define-plumloader delete_mesh (_fun _Mesh -> _void))

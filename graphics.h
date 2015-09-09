@@ -25,7 +25,7 @@
 /**
    Process the content of Mesh struct into a giant VBO-ready vector.
 */
-std::vector<GLfloat> vboify(Mesh mesh);
+std::vector<GLfloat> vboify(const Mesh mesh);
 
 extern "C" {
 #endif

@@ -95,12 +95,9 @@ extern "C" int program()
 {
 	initialize();
 
-	// Load mesh data
+	/* Load mesh data */
 	Mesh mesh = plum_loader("examples/example.plum");
 	std::vector<GLfloat> vbo_vector = vboify(mesh);
-
-	// Test VBOfiy
-	vboify(plum_loader("examples/example.plum"));
 
 	/* Shaders */
 	Shader* shader_mesh;
@@ -221,7 +218,7 @@ void draw_lamp(GLuint vao, Shader* shader)
 
 // Seems like returning vector by value doesn't affect performance, the compiler
 // does the optimization work.
-std::vector<GLfloat> vboify(Mesh mesh)
+std::vector<GLfloat> vboify(const Mesh mesh)
 {
 	std::vector<GLfloat> vbo;
 	for (std::size_t i = 0; i < mesh.face_count; i++) {
