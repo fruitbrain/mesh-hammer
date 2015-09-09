@@ -38,9 +38,6 @@ sdl-ffi.o: sdl-ffi.scm
 sdl-ffi$(DLLEXT): sdl-ffi.scm sdl.o
 	$(SC) -s sdl-ffi.scm sdl.o -c++ $(LIBS)
 
-sdl.o: sdl.cpp
-	$(CXX) $(CXXFLAGS) -c sdl.cpp
-
 ## Building Graphics Engine
 engine: libplumgraphics$(DLLEXT)
 
