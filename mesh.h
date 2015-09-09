@@ -22,6 +22,8 @@ typedef struct Mesh {
 	float** vertex_array;
 	/* Face array that consists of n-element vertex index arrays */
 	int** face_array;
+	/* Normalized face normal array that consists of 3-element coordinate arrays */
+	float** normal_array;
 } Mesh;
 
 #endif
