@@ -98,6 +98,9 @@ extern "C" int program()
 	// Load mesh data
 	GLfloat* vertices = plum_loader_vbo("examples/example.plum");
 
+	// Test VBOfiy
+	vboify(plum_loader("examples/example.plum"));
+
 	/* Shaders */
 	Shader* shader_mesh;
 	Shader* shader_lamp;
@@ -213,6 +216,17 @@ void draw_lamp(GLuint vao, Shader* shader)
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+/**
+   Process the content of Mesh struct into a giant VBO-ready vector.
+*/
+std::vector<GLfloat>* vboify(Mesh mesh)
+{
+	// FIXME
+	std::cout << get_vertex(mesh, 0)[0] << std::endl; // -0.5
+	std::cout << get_face(mesh, 0)[2] << std::endl;	  // 8
+	return nullptr;
 }
 
 /**

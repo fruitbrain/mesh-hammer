@@ -6,7 +6,8 @@
 	 ffi/cvector
 	 "mesh-data.rkt")
 
-(provide load-mesh)
+(provide load-mesh
+	 _Mesh)
 
 (define _float-ptr 'float-ptr)
 (define _int-ptr 'int-ptr)

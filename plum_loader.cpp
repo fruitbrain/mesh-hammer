@@ -179,6 +179,35 @@ extern "C" GLfloat* plum_loader_vbo(const char* filename)
 }
 
 /**
+   Get vertex vector of INDEX.
+*/
+std::vector<float> const get_vertex(const Mesh mesh, std::size_t index)
+{
+	if (index < mesh.vertex_count) {
+		float* vertex_ptr = mesh.vertex_array[index];
+		std::vector<float> vertex(vertex_ptr, vertex_ptr+3);
+		return vertex;
+	} else {
+		return std::vector<float>();
+	}
+}
+
+/**
+   Get face index vector at INDEX.
+*/
+std::vector<int> const get_face(const Mesh mesh, std::size_t index)
+{
+	if (index < mesh.face_count) {
+		int* face_ptr = mesh.face_array[index];
+		const std::size_t length = face_ptr[0];
+		std::vector<int> face(face_ptr+1, face_ptr+1+length);
+		return face;
+	} else {
+		return std::vector<int>();
+	}
+}
+
+/**
    Explicit destructor for struct Mesh.
    This is needed because C doensn't support destructors.
 */

@@ -1,8 +1,13 @@
+#include "mesh.h"
+
 #ifdef __cplusplus
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
+std::vector<float> const get_vertex(const Mesh mesh, std::size_t index);
+std::vector<int> const get_face(const Mesh mesh, std::size_t index);
 
 extern "C" {
 #endif
@@ -10,8 +15,6 @@ extern "C" {
 // For GLfloat
 #define GLEW_STATIC
 #include <GL/glew.h>
-
-#include "mesh.h"	
 
 /**
    Read .plum file and return resulting Mesh struct.

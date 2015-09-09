@@ -4,6 +4,7 @@
 // These are only here to not clutter already long .cpp files anymore with
 // #include lines.
 #include <iostream>
+#include <vector>
 #include <cmath>
 
 // GLEW
@@ -21,6 +22,8 @@
 #include "shader.h"
 #include "plum_loader.h"
 
+std::vector<GLfloat>* vboify(Mesh mesh);
+
 extern "C" {
 #endif
 
@@ -36,7 +39,7 @@ int program();
 /**
    Draw the Mesh object.
 */
-void draw_mesh_real(Mesh* mesh);
+void draw_mesh_real(Mesh mesh);
 
 #ifdef __cplusplus
 }
