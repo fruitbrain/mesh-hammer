@@ -118,7 +118,7 @@ extern "C" int program()
 
 	// Bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vbo_vector.size() * sizeof(GLfloat), vbo_vector.data(), GL_STATIC_DRAW);	// FIXME
+	glBufferData(GL_ARRAY_BUFFER, vbo_vector.size() * sizeof(GLfloat), vbo_vector.data(), GL_STATIC_DRAW);
 
 	// Link vertex attributes (Important!)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
