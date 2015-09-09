@@ -6,13 +6,19 @@ CXXFLAGS=-g -Wall -std=c++11 -fPIC
 
 UNAME=$(shell uname)
 # mingw is very quirky, we have to set PKG_CONFIG_PATH manually
-ifeq ($(UNAME),MINGW64_NT-10.0)
-#For manual compiling:
-#LIBS=-mwindows -lSDL2main -lSDL2 C:/msys64/mingw64/lib/libglfw3.a C:/msys64/mingw64/lib/libglew32.a -lopengl32
-PKG_CONFIG_PATH=/mingw64/lib/pkgconfig
-LIBS=$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --static --libs glfw3 glew)
+ifeq ($(OS),Windows_NT)
+	PKG_CONFIG_PATH=/mingw64/lib/pkgconfig
+	LIBS=$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --static --libs glfw3 glew)
+	DLLEXT := .dll
 else
-LIBS=$(shell pkg-config --static --libs glfw3 glew)
+	UNAME := $(shell uname -s)
+	LIBS=$(shell pkg-config --static --libs glfw3 glew)
+	ifeq ($(UNAME),Darwin)
+		DLLEXT := .dylib
+	endif
+	ifeq ($(UNAME),Linux)
+		DLLEXT := .so
+	endif
 endif
 
 EXE=plum
@@ -29,29 +35,29 @@ plum.o: plum.scm
 sdl-ffi.o: sdl-ffi.scm
 	$(SC) -c sdl-ffi.scm -c++
 
-sdl-ffi.so: sdl-ffi.scm sdl.o
+sdl-ffi$(DLLEXT): sdl-ffi.scm sdl.o
 	$(SC) -s sdl-ffi.scm sdl.o -c++ $(LIBS)
 
 sdl.o: sdl.cpp
 	$(CXX) $(CXXFLAGS) -c sdl.cpp
 
 ## Building Graphics Engine
-engine: libplumgraphics.so
+engine: libplumgraphics$(DLLEXT)
 
-graphics_test: graphics_test.c libplumgraphics.so
+graphics_test: graphics_test.c libplumgraphics$(DLLEXT)
 	$(CC) $(CFLAGS) -o graphics_test graphics_test.c -L. -lplumgraphics
 
-libplumgraphics.so: graphics.o libplumloader.so
-	$(CXX) -shared -o libplumgraphics.so graphics.o $(LIBS) -L. -lplumloader
+libplumgraphics$(DLLEXT): graphics.o libplumloader$(DLLEXT)
+	$(CXX) -shared -o libplumgraphics$(DLLEXT) graphics.o $(LIBS) -L. -lplumloader
 
 graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader
 	$(CXX) $(CXXFLAGS) -c graphics.cpp shader.h
 
-plum_loader_test: test/plum_loader_test.c libplumloader.so
+plum_loader_test: test/plum_loader_test.c libplumloader$(DLLEXT)
 	$(CC) $(CFLAGS) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
 
-libplumloader.so: plum_loader.o
-	$(CXX) -shared -o libplumloader.so plum_loader.o $(LIBS)
+libplumloader$(DLLEXT): plum_loader.o
+	$(CXX) -shared -o libplumloader$(DLLEXT) plum_loader.o $(LIBS)
 
 plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
@@ -59,4 +65,4 @@ plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 shader: shader.h shader.vert shader.frag lamp.frag
 
 clean:
-	rm -rf *.o *.so *.gch *.dSYM a.out plum graphics graphics_test
+	rm -rf *.o *$(DLLEXT) *.gch *.dSYM a.out plum graphics graphics_test
