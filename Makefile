@@ -36,8 +36,7 @@ sdl.o: sdl.cpp
 	$(CXX) $(CXXFLAGS) -c sdl.cpp
 
 ## Building Graphics Engine
-engine: graphics.o plum_loader.o
-	$(CXX) -o graphics graphics.o plum_loader.o $(LIBS)
+engine: libplumgraphics.so
 
 graphics_test: graphics_test.c libplumgraphics.so
 	$(CC) $(CFLAGS) -o graphics_test graphics_test.c -L. -lplumgraphics
