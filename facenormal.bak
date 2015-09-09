@@ -1,0 +1,9 @@
+#lang racket
+
+(define triangle '((1 2 3)(2 1 3)(2 2 3)))
+(define (trinormal tri)
+  (define vec1 (map - (second tri) (car tri)))
+  (define vec2 (map - (third tri) (car tri)))
+  (list (- (* (second vec1) (third vec2)) (* (third vec1) (second vec2))) (- (* (third vec1) (car vec2)) (* (car vec1) (third vec2))) (- (* (car vec1) (second vec2)) (* (second vec1) (car vec2)))))
+(define (facenormal facet)
+  (if (
