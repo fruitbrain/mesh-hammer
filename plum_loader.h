@@ -6,8 +6,8 @@
 #include <vector>
 #include <string>
 
-std::vector<float> const get_vertex(const Mesh mesh, std::size_t index);
-std::vector<int> const get_face(const Mesh mesh, std::size_t index);
+std::vector<float> get_vertex(const Mesh mesh, const std::size_t index);
+std::vector<int> get_face(const Mesh mesh, const std::size_t index);
 
 extern "C" {
 #endif

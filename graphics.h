@@ -22,7 +22,10 @@
 #include "shader.h"
 #include "plum_loader.h"
 
-std::vector<GLfloat>* vboify(Mesh mesh);
+/**
+   Process the content of Mesh struct into a giant VBO-ready vector.
+*/
+std::vector<GLfloat> vboify(Mesh mesh);
 
 extern "C" {
 #endif

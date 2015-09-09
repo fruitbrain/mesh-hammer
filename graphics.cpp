@@ -96,7 +96,8 @@ extern "C" int program()
 	initialize();
 
 	// Load mesh data
-	GLfloat* vertices = plum_loader_vbo("examples/example.plum");
+	Mesh mesh = plum_loader("examples/example.plum");
+	std::vector<GLfloat> vbo_vector = vboify(mesh);
 
 	// Test VBOfiy
 	vboify(plum_loader("examples/example.plum"));
@@ -120,7 +121,7 @@ extern "C" int program()
 
 	// Bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 216 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);	// FIXME
+	glBufferData(GL_ARRAY_BUFFER, vbo_vector.size() * sizeof(GLfloat), vbo_vector.data(), GL_STATIC_DRAW);	// FIXME
 
 	// Link vertex attributes (Important!)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
@@ -218,15 +219,26 @@ void draw_lamp(GLuint vao, Shader* shader)
 	glBindVertexArray(0);
 }
 
-/**
-   Process the content of Mesh struct into a giant VBO-ready vector.
-*/
-std::vector<GLfloat>* vboify(Mesh mesh)
+// Seems like returning vector by value doesn't affect performance, the compiler
+// does the optimization work.
+std::vector<GLfloat> vboify(Mesh mesh)
 {
-	// FIXME
-	std::cout << get_vertex(mesh, 0)[0] << std::endl; // -0.5
-	std::cout << get_face(mesh, 0)[2] << std::endl;	  // 8
-	return nullptr;
+	std::vector<GLfloat> vbo;
+	for (std::size_t i = 0; i < mesh.face_count; i++) {
+		std::vector<int> face = get_face(mesh, i);
+		for (std::vector<int>::iterator it = face.begin(); it != face.end(); it++) {
+			std::vector<GLfloat> found_vertex = get_vertex(mesh, *it);
+			vbo.insert(vbo.end(), found_vertex.begin(), found_vertex.end());
+		}
+	}
+
+	// Print vbo (for debugging)
+	std::cout << "Printing VBO array:" << std::endl;
+	for (auto it = vbo.begin(); it != vbo.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	return vbo;
 }
 
 /**

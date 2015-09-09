@@ -151,37 +151,9 @@ extern "C" Mesh plum_loader(const char* filename)
 }
 
 /**
-   Convert .plum file directly into a VBO data array.
-*/
-extern "C" GLfloat* plum_loader_vbo(const char* filename)
-{
-	Mesh mesh = plum_loader(filename);
-	const int vbo_size = mesh.face_count * 3;
-	GLfloat* vbo_list = new GLfloat[vbo_size];
-
-	// FIXME
-	/*for (int i=0; i<mesh.face_count; i++) {
-		vbo_list[i*3] = mesh.vertex_array[mesh.face_array[i][0]] [0];
-		vbo_list[i*3+1] = mesh.vertex_array[mesh.face_array[i][1]] [1];
-		vbo_list[i*3+2] = mesh.vertex_array[mesh.face_array[i][2]] [2];
-		}*/
-
-	// Delete arrays of struct mesh
-	delete_mesh(mesh);
-
-	// Print VBOList items
-	std::cout << "Printing vbo_list[]..." << std::endl;
-	for (int i=0; i<vbo_size; i++)
-		std::cout << vbo_list[i] << " ";
-	std::cout << std::endl;
-
-	return vbo_list;
-}
-
-/**
    Get vertex vector of INDEX.
 */
-std::vector<float> const get_vertex(const Mesh mesh, std::size_t index)
+std::vector<float> get_vertex(const Mesh mesh, const std::size_t index)
 {
 	if (index < mesh.vertex_count) {
 		float* vertex_ptr = mesh.vertex_array[index];
@@ -195,7 +167,7 @@ std::vector<float> const get_vertex(const Mesh mesh, std::size_t index)
 /**
    Get face index vector at INDEX.
 */
-std::vector<int> const get_face(const Mesh mesh, std::size_t index)
+std::vector<int> get_face(const Mesh mesh, const std::size_t index)
 {
 	if (index < mesh.face_count) {
 		int* face_ptr = mesh.face_array[index];
