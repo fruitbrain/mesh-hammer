@@ -5,6 +5,7 @@
 // #include lines.
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <cmath>
 
 // GLEW
@@ -21,6 +22,15 @@
 
 #include "shader.h"
 #include "plum_loader.h"
+
+/**
+   Struct that contains GLFW window and event queue.
+*/
+class Context {
+public:
+	GLFWwindow* window;
+	std::queue<const char*> event_queue;
+};
 
 /**
    Process the content of Mesh struct into a giant VBO-ready vector.

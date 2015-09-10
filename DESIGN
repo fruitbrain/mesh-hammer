@@ -1,3 +1,20 @@
+# TODO
+
+Diffuse lighting:
+* Modify structs to contain normal vectors -- fruit
+* Migrate main program loop to Racket -- brain
+* Update vboify to convert normal vectors as well
+* Check order of vertices in each face in example.plum
+
+## Input/Output
+Input:
+* Error code
+
+Output (Racket -> C):
+* struct Mesh -- when user loaded .plum file for the first time
+  e.g. (draw-mesh c-mesh)
+* Mesh changeset (delta)
+
 ## Sending mesh data from Racket to C
 
 There are two ways:

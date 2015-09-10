@@ -4,7 +4,8 @@ void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-GLFWwindow* window;
+Context* context;
+
 glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -58,6 +59,8 @@ GLfloat vertices_cube[] = {
 */
 extern "C" void initialize()
 {
+	context = new Context();
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -65,15 +68,15 @@ extern "C" void initialize()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Plum", nullptr, nullptr);
-	if (window == nullptr) {
+	context->window = glfwCreateWindow(WIDTH, HEIGHT, "Plum", nullptr, nullptr);
+	if (context->window == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return;
 	}
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(context->window);
 
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(context->window, key_callback);
 
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
@@ -143,7 +146,7 @@ extern "C" int program()
 	glBindVertexArray(0);
 
 	/* Render loop */
-	while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(context->window)) {
 		/* Check and call events */
 		glfwPollEvents();
 
@@ -156,11 +159,13 @@ extern "C" int program()
 		draw_lamp(vao_light, shader_lamp);
 
 		/* Swap the buffers */
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(context->window);
 	}
 
 	glfwTerminate();
 
+	delete_mesh(mesh);
+	delete context;
 	delete shader_mesh;
 	delete shader_lamp;
 
