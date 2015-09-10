@@ -47,7 +47,7 @@ graphics_test: graphics_test.c libplumgraphics$(DLLEXT)
 libplumgraphics$(DLLEXT): graphics.o libplumloader$(DLLEXT)
 	$(CXX) -shared -o libplumgraphics$(DLLEXT) graphics.o $(LIBS) -L. -lplumloader
 
-graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader
+graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader.h *.vert *.frag
 	$(CXX) $(CXXFLAGS) -c graphics.cpp shader.h
 
 plum_loader_test: test/plum_loader_test.c libplumloader$(DLLEXT)
@@ -58,8 +58,6 @@ libplumloader$(DLLEXT): plum_loader.o
 
 plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
-
-shader: shader.h shader.vert shader.frag lamp.frag
 
 clean:
 	rm -rf *.o *$(DLLEXT) *.gch *.dSYM a.out plum graphics graphics_test
