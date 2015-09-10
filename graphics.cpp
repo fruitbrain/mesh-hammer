@@ -7,6 +7,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
+std::queue<Event>* event_queue;
+
 // Cube
 GLfloat vertices_cube[] = {
     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -58,6 +60,7 @@ GLfloat vertices_cube[] = {
 extern "C" Context* initialize()
 {
 	Context* context = new Context();
+	event_queue = &context->event_queue;
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -150,6 +153,8 @@ extern "C" int program()
 		/* Check and call events */
 		glfwPollEvents();
 
+		std::cout << poll_event(context);
+
 		/* Render */
 		// Reset screen
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -162,10 +167,10 @@ extern "C" int program()
 		glfwSwapBuffers(context->window);
 	}
 
-	glfwTerminate();
+	glfwTerminate();	// (supposedly) deletes *window
 
 	delete_mesh(mesh);
-	delete context;
+	delete context;		// (supposedly) deletes event_queue
 	delete shader_mesh;
 	delete shader_lamp;
 
@@ -243,6 +248,18 @@ std::vector<GLfloat> vboify(const Mesh mesh)
 	return vbo;
 }
 
+extern "C" Event poll_event(Context* context)
+{
+	// Segfaults if pop an empty queue
+	if (context->event_queue.empty())
+		return "";
+	else {
+		std::string next_event = std::string(context->event_queue.front());
+		context->event_queue.pop();
+		return next_event.c_str();
+	}
+}
+
 /**
    Key callback function for GLFW.
 */
@@ -250,5 +267,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
+		event_queue->push("esc");
 	}
 }

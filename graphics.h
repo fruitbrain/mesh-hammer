@@ -44,6 +44,7 @@ extern "C" {
 /// For use in Racket
 struct Context;
 typedef struct Context Context;
+typedef const char* Event;
 
 /**
    Initialize everything needed to show a window and an OpenGL context.
@@ -56,6 +57,11 @@ int program();
    Draw the Mesh object.
 */
 void draw_mesh_real(Mesh mesh);
+
+/**
+   Pop the first event stored in the event_queue.
+*/
+Event poll_event(Context* context);
 
 #ifdef __cplusplus
 }
