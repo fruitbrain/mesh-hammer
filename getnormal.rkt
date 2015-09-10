@@ -2,4 +2,4 @@
 
 (require "mesh-data.rkt")
 
-(load-mesh ""
+(load-mesh "example.plum")

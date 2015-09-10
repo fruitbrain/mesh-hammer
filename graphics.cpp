@@ -96,7 +96,7 @@ extern "C" int program()
 	initialize();
 
 	/* Load mesh data */
-	Mesh mesh = plum_loader("examples/example.plum");
+	// Mesh mesh = plum_loader("examples/example.plum");
 	std::vector<GLfloat> vbo_vector = vboify(mesh);
 
 	/* Shaders */
