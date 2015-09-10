@@ -26,8 +26,7 @@
 /**
    Struct that contains GLFW window and event queue.
 */
-class Context {
-public:
+struct Context {
 	GLFWwindow* window;
 	std::queue<const char*> event_queue;
 };
@@ -42,10 +41,14 @@ extern "C" {
 
 #include "mesh.h"
 
+/// For use in Racket
+struct Context;
+typedef struct Context Context;
+
 /**
    Initialize everything needed to show a window and an OpenGL context.
 */
-void initialize();
+Context* initialize();
 
 int program();
 

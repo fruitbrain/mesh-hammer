@@ -4,8 +4,6 @@ void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-Context* context;
-
 glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -57,9 +55,9 @@ GLfloat vertices_cube[] = {
 /**
    Initialize everything needed to show a window and an OpenGL context.
 */
-extern "C" void initialize()
+extern "C" Context* initialize()
 {
-	context = new Context();
+	Context* context = new Context();
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -72,7 +70,7 @@ extern "C" void initialize()
 	if (context->window == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return;
+		return nullptr;
 	}
 	glfwMakeContextCurrent(context->window);
 
@@ -82,13 +80,15 @@ extern "C" void initialize()
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Failed to initialize GLEW" << std::endl;
-		return;
+		return nullptr;
 	}
 
 	glViewport(0, 0, 800, 600);
 
 	/* OpenGL options */
 	glEnable(GL_DEPTH_TEST);
+
+	return context;
 }
 
 /**
@@ -96,10 +96,10 @@ extern "C" void initialize()
 */
 extern "C" int program()
 {
-	initialize();
+	Context* context = initialize();
 
 	/* Load mesh data */
-	// Mesh mesh = plum_loader("examples/example.plum");
+	Mesh mesh = plum_loader("examples/example.plum");
 	std::vector<GLfloat> vbo_vector = vboify(mesh);
 
 	/* Shaders */
@@ -248,6 +248,7 @@ std::vector<GLfloat> vboify(const Mesh mesh)
 */
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
 }
