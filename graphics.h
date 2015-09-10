@@ -28,7 +28,7 @@
 */
 struct Context {
 	GLFWwindow* window;
-	std::queue<const char*> event_queue;
+	std::queue<int> event_queue;
 };
 
 /**
@@ -40,11 +40,12 @@ extern "C" {
 #endif
 
 #include "mesh.h"
+#include "events.h"
 
 /// For use in Racket
 struct Context;
 typedef struct Context Context;
-typedef const char* Event;
+typedef int Event;
 
 /**
    Initialize everything needed to show a window and an OpenGL context.
@@ -61,7 +62,24 @@ void draw_mesh_real(Mesh mesh);
 /**
    Pop the first event stored in the event_queue.
 */
-Event poll_event(Context* context);
+Event probe_event(Context* context);
+
+/**
+   Binding for glfwPollEvents().
+*/
+void poll_events();
+
+/**
+   Binding for glfwWindowShouldClose().
+   Accepts Context*.
+*/
+bool window_should_close(Context* context);
+
+/**
+   Binding for glfwSetWindowShouldClose().
+   Accepts Context* and bool.
+*/
+void set_window_should_close(Context* context, bool value);
 
 #ifdef __cplusplus
 }

@@ -91,6 +91,7 @@ extern "C" Context* initialize()
 	/* OpenGL options */
 	glEnable(GL_DEPTH_TEST);
 
+	std::cout << "Context initialized" << std::endl;
 	return context;
 }
 
@@ -153,7 +154,7 @@ extern "C" int program()
 		/* Check and call events */
 		glfwPollEvents();
 
-		std::cout << poll_event(context);
+		std::cout << probe_event(context);
 
 		/* Render */
 		// Reset screen
@@ -248,16 +249,33 @@ std::vector<GLfloat> vboify(const Mesh mesh)
 	return vbo;
 }
 
-extern "C" Event poll_event(Context* context)
+extern "C" Event probe_event(Context* context)
 {
 	// Segfaults if pop an empty queue
-	if (context->event_queue.empty())
-		return "";
-	else {
-		std::string next_event = std::string(context->event_queue.front());
-		context->event_queue.pop();
-		return next_event.c_str();
+	if (context->event_queue.size() == 0) {
+		return NO_EVENT;
 	}
+	else {
+		Event next_event = context->event_queue.front(); // XXX: might cause memory failure
+		context->event_queue.pop();
+		return next_event;
+	}
+}
+
+extern "C" void poll_events()
+{
+	glfwPollEvents();
+}
+
+extern "C" bool window_should_close(Context* context)
+{
+	return glfwWindowShouldClose(context->window) == GL_TRUE;
+}
+
+extern "C" void set_window_should_close(Context* context, bool value)
+{
+	int value_i = value ? GL_TRUE : GL_FALSE;
+	glfwSetWindowShouldClose(context->window, value_i);
 }
 
 /**
@@ -267,6 +285,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
-		event_queue->push("esc");
+		event_queue->push(KEY_ESCAPE);
 	}
 }
