@@ -57,7 +57,7 @@ libplumloader$(DLLEXT): plum_loader.o model.o mesh.o
 	$(CXX) -shared -o libplumloader$(DLLEXT) plum_loader.o model.o mesh.o $(LIBS)
 
 plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
-	$(CXX) $(CXXFLAGS) -c plum_loader.cpp plum_loader.h
+	$(CXX) $(CXXFLAGS) -c plum_loader.cpp
 
 model.o: model.cpp model.h
 	$(CXX) $(CXXFLAGS) -c model.cpp

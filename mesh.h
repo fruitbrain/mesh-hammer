@@ -31,7 +31,10 @@ public:
 #else
 #include <stdbool.h>
 #include <stddef.h>
-typedef struct Mesh Mesh;
-#endif
 
-#endif
+/* Shadow Mesh to a struct so gcc doesn't complain */
+typedef struct Mesh Mesh;
+
+#endif	/* #ifdef __cplusplus */
+
+#endif	/* #ifndef _MESH_H_ */
