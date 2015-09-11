@@ -1,10 +1,13 @@
 #include "graphics.h"
 
+GLuint make_vao(GLuint vbo, std::vector<GLfloat>& vbo_vector);
+GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data);
+GLuint make_light_vao(std::vector<GLfloat>& vbo_data);
 void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-glm::vec3 pos_light(1.2f, 1.0f, 2.0f);
+glm::vec3 pos_light(0.8f, 0.8f, 0.8f);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 std::queue<Event>* event_queue;
@@ -113,31 +116,13 @@ extern "C" int program()
 	shader_lamp = new Shader("shader.vert", "lamp.frag");
 
 	/* Generate Opengl objects */
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	GLuint vbo_cube;
-	glGenBuffers(1, &vbo_cube);
-
-	/* VAO for the mesh */
-	GLuint vao_mesh;
-	glGenVertexArrays(1, &vao_mesh);
-	glBindVertexArray(vao_mesh);
-
-	// Bind VBO
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vbo_vector.size() * sizeof(GLfloat), vbo_vector.data(), GL_STATIC_DRAW);
-
-	// Link vertex attributes (Important!)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);	// Is this needed?
-
-	glBindVertexArray(0);
+	GLuint vao_mesh = make_mesh_vao(vbo_vector);
 
 	/* VAO for the light */
-	GLuint vao_light;
+
+	std::vector<GLfloat> vbo_vector_cube(vertices_cube, vertices_cube + sizeof vertices_cube / sizeof vertices_cube[0]);
+	GLuint vao_light = make_light_vao(vbo_vector_cube);
+	/*GLuint vao_light;
 	glGenVertexArrays(1, &vao_light);
 	glBindVertexArray(vao_light);
 
@@ -147,14 +132,12 @@ extern "C" int program()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 
 	/* Render loop */
 	while (!glfwWindowShouldClose(context->window)) {
 		/* Check and call events */
 		glfwPollEvents();
-
-		std::cout << probe_event(context);
 
 		/* Render */
 		// Reset screen
@@ -176,6 +159,77 @@ extern "C" int program()
 	delete shader_lamp;
 
 	return 0;
+}
+
+GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data)
+{
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	std::cout << "vbo: " << vbo << std::endl;
+
+	/* VAO for the mesh */
+	GLuint vao_mesh;
+	glGenVertexArrays(1, &vao_mesh);
+	glBindVertexArray(vao_mesh);
+
+	// Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(GLfloat), vbo_data.data(), GL_STATIC_DRAW);
+
+	// Link vertex attributes (Important!)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);	// (supposedly) unbind GL_ARRAY_BUFFER
+
+	glBindVertexArray(0);
+
+	return vao_mesh;
+}
+
+GLuint make_light_vao(std::vector<GLfloat>& vbo_data)
+{
+	GLuint vbo_cube;
+	glGenBuffers(1, &vbo_cube);
+	std::cout << "vbo_cube: " << vbo_cube << std::endl;
+
+	GLuint vao_light;
+	glGenVertexArrays(1, &vao_light);
+	glBindVertexArray(vao_light);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_cube);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cube), vertices_cube, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+
+	return vao_light;
+}
+
+GLuint make_vao(GLuint vbo, std::vector<GLfloat>& vbo_data)
+{
+	/* VAO for the mesh */
+	GLuint vao_mesh;
+	glGenVertexArrays(1, &vao_mesh);
+	glBindVertexArray(vao_mesh);
+
+	// Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(GLfloat), vbo_data.data(), GL_STATIC_DRAW);
+
+	// Link vertex attributes (Important!)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);	// (supposedly) unbind GL_ARRAY_BUFFER
+
+	glBindVertexArray(0);
+
+	return vao_mesh;
 }
 
 /**
