@@ -43,7 +43,6 @@ extern "C" {
 #include "events.h"
 
 /// For use in Racket
-struct Context;
 typedef struct Context Context;
 typedef int Event;
 
