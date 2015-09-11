@@ -1,7 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-	 ffi/unsafe/define)
+	 ffi/unsafe/define
+	 data/queue)
 
 (define-ffi-definer define-plumgraphics
   (ffi-lib "libplumgraphics"))
@@ -21,6 +22,9 @@
 ;;; Initialize GLFW and show window
 (define context (initialize))
 
+;;; Queue for VAO creating/uploading
+(define vao)
+
 ;;; Main game loop
 (define (game-loop)
   (unless (window_should_close context)
@@ -30,6 +34,6 @@
 
 (define (event-handler event)
   (case event
-    [(256) (display "Window close!\n")]))
+    [(256) (display "Window close!\n")])) ; FIXME constant
 
 (game-loop)

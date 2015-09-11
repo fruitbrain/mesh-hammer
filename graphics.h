@@ -65,9 +65,19 @@ void draw_mesh_real(Mesh mesh);
 Event probe_event(Context* context);
 
 /**
+   Reset screen before render.
+*/
+void clear_screen();
+
+/**
    Binding for glfwPollEvents().
 */
 void poll_events();
+
+/**
+   Swap buffers.
+*/
+void swap_buffers(Context* context);
 
 /**
    Binding for glfwWindowShouldClose().

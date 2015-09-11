@@ -1,8 +1,9 @@
 #include "graphics.h"
 
+void clear_screen();
 GLuint make_vao(GLuint vbo, std::vector<GLfloat>& vbo_vector);
-GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data);
-GLuint make_light_vao(std::vector<GLfloat>& vbo_data);
+GLuint make_vao_mesh(std::vector<GLfloat>& vbo_data);
+GLuint make_vao_light(std::vector<GLfloat>& vbo_data);
 void draw_mesh(GLuint vao, Shader* shader);
 void draw_lamp(GLuint vao, Shader* shader);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -108,6 +109,11 @@ extern "C" int program()
 	/* Load mesh data */
 	Mesh mesh = plum_loader("examples/example.plum");
 	std::vector<GLfloat> vbo_vector = vboify(mesh);
+	std::vector<GLfloat> vbo_vector_cube(vertices_cube, vertices_cube + sizeof vertices_cube / sizeof vertices_cube[0]);
+
+	/* Generate VAOs */
+	GLuint vao_mesh = make_vao_mesh(vbo_vector);
+	GLuint vao_light = make_vao_light(vbo_vector_cube);
 
 	/* Shaders */
 	Shader* shader_mesh;
@@ -115,40 +121,19 @@ extern "C" int program()
 	shader_mesh = new Shader("shader.vert", "shader.frag");
 	shader_lamp = new Shader("shader.vert", "lamp.frag");
 
-	/* Generate Opengl objects */
-	GLuint vao_mesh = make_mesh_vao(vbo_vector);
-
-	/* VAO for the light */
-
-	std::vector<GLfloat> vbo_vector_cube(vertices_cube, vertices_cube + sizeof vertices_cube / sizeof vertices_cube[0]);
-	GLuint vao_light = make_light_vao(vbo_vector_cube);
-	/*GLuint vao_light;
-	glGenVertexArrays(1, &vao_light);
-	glBindVertexArray(vao_light);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_cube);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cube), vertices_cube, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);*/
-
 	/* Render loop */
 	while (!glfwWindowShouldClose(context->window)) {
 		/* Check and call events */
-		glfwPollEvents();
+		poll_events();
 
 		/* Render */
-		// Reset screen
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		clear_screen();
 
 		draw_mesh(vao_mesh, shader_mesh);
 		draw_lamp(vao_light, shader_lamp);
 
 		/* Swap the buffers */
-		glfwSwapBuffers(context->window);
+		swap_buffers(context);
 	}
 
 	glfwTerminate();	// (supposedly) deletes *window
@@ -161,13 +146,12 @@ extern "C" int program()
 	return 0;
 }
 
-GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data)
+GLuint make_vao_mesh(std::vector<GLfloat>& vbo_data)
 {
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	std::cout << "vbo: " << vbo << std::endl;
 
-	/* VAO for the mesh */
 	GLuint vao_mesh;
 	glGenVertexArrays(1, &vao_mesh);
 	glBindVertexArray(vao_mesh);
@@ -179,8 +163,6 @@ GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data)
 	// Link vertex attributes (Important!)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);	// (supposedly) unbind GL_ARRAY_BUFFER
 
 	glBindVertexArray(0);
@@ -188,7 +170,7 @@ GLuint make_mesh_vao(std::vector<GLfloat>& vbo_data)
 	return vao_mesh;
 }
 
-GLuint make_light_vao(std::vector<GLfloat>& vbo_data)
+GLuint make_vao_light(std::vector<GLfloat>& vbo_data)
 {
 	GLuint vbo_cube;
 	glGenBuffers(1, &vbo_cube);
@@ -303,6 +285,13 @@ std::vector<GLfloat> vboify(const Mesh mesh)
 	return vbo;
 }
 
+extern "C" void clear_screen()
+{
+	// Reset screen
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 extern "C" Event probe_event(Context* context)
 {
 	// Segfaults if pop an empty queue
@@ -319,6 +308,12 @@ extern "C" Event probe_event(Context* context)
 extern "C" void poll_events()
 {
 	glfwPollEvents();
+}
+
+extern "C" void swap_buffers(Context* context)
+{
+	// Swap the buffers
+	glfwSwapBuffers(context->window);
 }
 
 extern "C" bool window_should_close(Context* context)
