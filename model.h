@@ -5,6 +5,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+// GLM
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "shader.h"
 
 class Model
@@ -25,4 +29,5 @@ protected:
 	GLuint vao;
 	Shader* shader;
 	std::vector<GLuint> vbos;
+	std::vector<std::vector<GLfloat>> vbo_datas;
 };

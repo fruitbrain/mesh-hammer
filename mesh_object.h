@@ -1,16 +1,11 @@
-#ifndef _MESH_H_
-#define _MESH_H_
+#include <vector>
+#include "model.h"
 
-#ifdef __cplusplus
-#include <cstddef>
-#else
-#include <stdbool.h>
-#include <stddef.h>
-#endif	/* #ifdef __cplusplus */
+// GLFW
+#include <GLFW/glfw3.h>
 
-/* C struct representation of the mesh data of an object
-   Will be directly converted to and from Racket data */
-typedef struct Mesh {
+class MeshObject : public Model {
+public:
 	/* File read status */
 	bool read_status;
 	/* Total num of vertices */
@@ -23,6 +18,10 @@ typedef struct Mesh {
 	int** face_array;
 	/* Normalized face normal array that consists of 3-element coordinate arrays */
 	float** normal_array;
-} Mesh;
 
-#endif	/* #ifndef _MESH_H_ */
+	MeshObject();
+	~MeshObject();
+
+	void draw() override;
+	void create(std::vector<GLfloat> vbo_data);
+};
