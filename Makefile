@@ -53,8 +53,8 @@ graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader.h *.vert *.frag
 plum_loader_test: test/plum_loader_test.c libplumloader$(DLLEXT)
 	$(CC) $(CFLAGS) -o plum_loader_test test/plum_loader_test.c -L. -lplumloader
 
-libplumloader$(DLLEXT): plum_loader.o model.o mesh_object.o
-	$(CXX) -shared -o libplumloader$(DLLEXT) plum_loader.o model.o mesh_object.o $(LIBS)
+libplumloader$(DLLEXT): plum_loader.o
+	$(CXX) -shared -o libplumloader$(DLLEXT) plum_loader.o $(LIBS)
 
 plum_loader.o: plum_loader.cpp plum_loader.h mesh.h
 	$(CXX) $(CXXFLAGS) -c plum_loader.cpp
