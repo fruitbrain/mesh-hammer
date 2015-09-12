@@ -20,6 +20,7 @@ public:
 	float** normal_array;
 
 	MeshObject();
+	MeshObject(std::vector<GLfloat> vbo_data);
 	~MeshObject();
 
 	void draw() override;

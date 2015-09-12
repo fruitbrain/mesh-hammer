@@ -107,18 +107,15 @@ extern "C" int program()
 	Context* context = initialize();
 
 	/* Load mesh data */
-	Mesh mesh = plum_loader("examples/example.plum");
-	std::vector<GLfloat> vbo_vector = vboify(mesh);
+	Mesh mesh_data = plum_loader("examples/example.plum");
 	std::vector<GLfloat> vbo_vector_cube(vertices_cube, vertices_cube + sizeof vertices_cube / sizeof vertices_cube[0]);
 
 	/* Generate VAOs */
-	GLuint vao_mesh = make_vao_mesh(vbo_vector);
+	MeshObject mesh_obj(vboify(mesh_data));
 	GLuint vao_light = make_vao_light(vbo_vector_cube);
 
 	/* Shaders */
-	Shader* shader_mesh;
 	Shader* shader_lamp;
-	shader_mesh = new Shader("shader.vert", "shader.frag");
 	shader_lamp = new Shader("shader.vert", "lamp.frag");
 
 	/* Render loop */
@@ -129,7 +126,7 @@ extern "C" int program()
 		/* Render */
 		clear_screen();
 
-		draw_mesh(vao_mesh, shader_mesh);
+		mesh_obj.draw();
 		draw_lamp(vao_light, shader_lamp);
 
 		/* Swap the buffers */
@@ -138,9 +135,9 @@ extern "C" int program()
 
 	glfwTerminate();	// (supposedly) deletes *window
 
-	delete_mesh(mesh);
+	delete_mesh(mesh_data);
 	delete context;		// (supposedly) deletes event_queue
-	delete shader_mesh;
+	//delete shader_mesh;
 	delete shader_lamp;
 
 	return 0;

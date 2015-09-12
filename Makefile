@@ -44,8 +44,8 @@ engine: libplumgraphics$(DLLEXT)
 graphics_test: graphics_test.c libplumgraphics$(DLLEXT)
 	$(CC) $(CFLAGS) -o graphics_test graphics_test.c -L. -lplumgraphics
 
-libplumgraphics$(DLLEXT): graphics.o libplumloader$(DLLEXT)
-	$(CXX) -shared -o libplumgraphics$(DLLEXT) graphics.o $(LIBS) -L. -lplumloader
+libplumgraphics$(DLLEXT): graphics.o model.o mesh_object.o libplumloader$(DLLEXT)
+	$(CXX) -shared -o libplumgraphics$(DLLEXT) graphics.o model.o mesh_object.o $(LIBS) -L. -lplumloader
 
 graphics.o: graphics.cpp graphics.h mesh.h plum_loader.h shader.h *.vert *.frag
 	$(CXX) $(CXXFLAGS) -c graphics.cpp shader.h

@@ -4,13 +4,23 @@ MeshObject::MeshObject()
 {
 }
 
+MeshObject::MeshObject(std::vector<GLfloat> vbo_data)
+{
+	create(vbo_data);
+}
+
 MeshObject::~MeshObject()
 {
 	// Deleted in destructor of Model
 }
 
+/// FIXME: merge into constructor?
 void MeshObject::create(std::vector<GLfloat> vbo_data)
 {
+	/* Shader */
+	shader = new Shader("shader.vert", "shader.frag");
+
+	/* VAO */
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	std::cout << "vbo: " << vbo << std::endl;

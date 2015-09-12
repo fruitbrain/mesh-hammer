@@ -20,6 +20,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "mesh_object.h"
 #include "shader.h"
 #include "plum_loader.h"
 
