@@ -107,7 +107,7 @@ extern "C" int program()
 	Context* context = initialize();
 
 	/* Load mesh data */
-	Mesh mesh_data = plum_loader("examples/example.plum");
+	Mesh mesh_data = plum_loader("examples/example0.plum");
 	std::vector<GLfloat> vbo_vector_cube(vertices_cube, vertices_cube + sizeof vertices_cube / sizeof vertices_cube[0]);
 
 	/* Generate VAOs */
