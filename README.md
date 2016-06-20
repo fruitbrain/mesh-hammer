@@ -1,6 +1,8 @@
 # Plum
 Plum, a Lisp-powered Ultimate Modeler
 
+![Plum](screenshot.png)
+
 ## Build environment setup
 ### 1. Install MSYS2
   from https://msys2.github.io/.
