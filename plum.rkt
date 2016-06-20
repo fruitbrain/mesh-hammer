@@ -34,6 +34,7 @@
 
 (define (event-handler event)
   (case event
-    [(256) (display "Window close!\n")])) ; FIXME constant
+    [(256) (display "Window close!\n")]
+		[(105) (display "What? I???\n")])) ; FIXME constant
 
 (game-loop)

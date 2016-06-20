@@ -1,9 +1,12 @@
+/* header guards */
 #ifndef _MESH_H_
 #define _MESH_H_
 
+/* if using c++ use cstddef */
 #ifdef __cplusplus
 #include <cstddef>
 #else
+/* else if using c use stdbool.h & stddef.h */
 #include <stdbool.h>
 #include <stddef.h>
 #endif	/* #ifdef __cplusplus */
