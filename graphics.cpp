@@ -137,7 +137,6 @@ extern "C" int program()
 
 	delete_mesh(mesh_data);
 	delete context;		// (supposedly) deletes event_queue
-	//delete shader_mesh;
 	delete shader_lamp;
 
 	return 0;
