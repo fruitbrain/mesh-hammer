@@ -1,5 +1,4 @@
-# Plum
-Plum, a Lisp-powered Ultimate Modeler
+# Plum, a Lisp-powered Ultimate Modeler
 
 Plum is a 3-D modelling tool that (will be) designed to have simple and
 intuitive UI, and extensibility through scripting using an embedded Lisp.
